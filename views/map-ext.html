@@ -1,0 +1,39 @@
+
+
+{% extends "_base.html" %}
+{% import "_macros.html" as mac with context %}
+
+
+{% set page_title = "FGx Map" %}
+
+{#=======================================================#}
+{% block header %}
+
+<script>
+//** GLOBAL gral.. this one is ok I hopeee
+var VP = null;
+</script>
+
+{{ mac.ext_js4(ext_theme=c.ext_theme) }}
+{{ mac.openlayers_js() }}
+
+<script type="text/javascript" src="/fgx_js.{{app_globals.fgx_js_version}}/main.js"></script>
+<script type="text/javascript" src="/fgx_js.{{app_globals.fgx_js_version}}/layers.js"></script>
+{% endblock header %}
+
+
+
+{#=======================================================#}
+{% block content %}
+Loading, please wait.... (Note: initial load can take time as javascript is pulled and cached)
+
+<script>
+Ext.onReady(function(){
+	Ext.Msg.wait("Loading, caching and initializing map");
+	VP = Ext.create("FGx.MainViewport", {});
+	VP.initialize();
+	Ext.Msg.hide();
+});
+</script>
+
+{% endblock %}
