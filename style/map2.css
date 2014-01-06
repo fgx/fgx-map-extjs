@@ -1,0 +1,53 @@
+
+
+body {
+    margin: 0;
+	background-color: #eeeeee;
+}
+
+
+#map_div {
+    background-color: #efefef;
+    width: 800px;
+    height: 800px;
+}
+
+#msg-div {
+    position:absolute;
+    left:35%;
+    top:100px;
+    width:500px;
+    z-index:80000;
+}
+
+/*#fitinfo {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+}*/
+
+#fgxlogo {
+    position:fixed;
+    bottom:10px;
+    left: 20px;
+    background:transparent;
+    text-align:left;
+    vertical-align: center;
+    padding:0px;
+    width:70%;
+    height: auto;
+    font-family: arial, helvetica, sans-serif;
+    font-size: 10px;
+}
+
+/* Set map Background Color vs opacity */
+/*
+.olMapViewport {
+	background-color: black;
+}
+*/
+.x_bot_running{
+		background-color: green;
+}
+
+

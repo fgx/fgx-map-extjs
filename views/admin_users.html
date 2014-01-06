@@ -1,0 +1,42 @@
+
+
+{% extends "_base.html" %}
+{% import "_macros.html" as mac with context %}
+
+
+{% set page_title = "FGx User Admin" %}
+
+{#=======================================================#}
+{% block header %}
+
+
+
+{{ mac.ext_js() }}
+{{ mac.openlayers_js() }}
+
+<script type="text/javascript" src="/fgx_js.{{app_globals.fgx_js_version}}/main.js"></script>
+
+<script type="text/javascript" src="/fgx_js.{{app_globals.fgx_js_version}}/UserAdminDialog.js"></script>
+<script type="text/javascript" src="/fgx_js.{{app_globals.fgx_js_version}}/UsersAdminGrid.js"></script>	
+
+
+{% endblock header %}
+
+
+
+{#=======================================================#}
+{% block content %}
+
+<div id="widget_div"></div>
+<script>
+Ext.onReady(function(){
+	var widget = new FGx.UsersAdminGrid({
+		renderTo: "widget_div",
+		height: window.innerHeight - 10
+	});
+	widget.initialize();
+
+});
+</script>
+
+{% endblock %}

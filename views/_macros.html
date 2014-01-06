@@ -1,0 +1,77 @@
+
+{#------------------------------------------------------------------------------------#}
+{##  Ext js ##}
+{% macro ext_js(ver="3.4.0", ext_theme="xtheme-gray.css") %}
+
+
+
+<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/ext-all.js"></script>
+
+<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridSorter.js"></script>
+<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridColumnResizer.js"></script>
+<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridNodeUI.js"></script>
+<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridLoader.js"></script>
+<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridColumns.js"></script>
+<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGrid.js"></script>
+
+
+<link rel="stylesheet" type="text/css" href="{{c.server.static}}/js/ext-{{c.ext_ver}}/resources/css/ext-all.css" />
+
+<link rel="stylesheet" type="text/css" href="/dynamic.{{c.ver}}.css" /> 
+
+<script>
+var EXT_CHART_SWF = "{{c.server.static}}/js/ext-{{c.ext_ver}}/resources/charts.swf";
+</script>
+
+
+{% endmacro %}
+
+{% macro ext_js4(ver="4.1.1a", ext_theme="xtheme-gray.css") %}
+
+
+<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/ext-all.js"></script>
+
+<link rel="stylesheet" type="text/css" href="{{c.server.static}}/js/ext-{{c.ext_ver}}/resources/css/ext-all.css" />
+
+<link rel="stylesheet" type="text/css" href="/dynamic.{{c.ver}}.css" /> 
+{# GeoExt: "/fgx-static/js/GeoExt-2.0/src/GeoExt", #}
+<script>
+Ext.Loader.setConfig({
+	enabled: true,
+	paths: {
+		Ext: "{{c.server.static}}/js/ext-{{ver}}/",
+		GeoExt: "{{c.server.static}}/js/GeoExt-2.0/src/GeoExt",
+		FGx: '/fgx_ext/{{c.ver}}'
+	}
+});
+
+Ext.Ajax.disableCaching = true;
+//Ext.Loader.config.disableCaching = true;
+</script>
+
+
+{% endmacro %}
+
+
+{#------------------------------------------------------------------------------------#}
+{# OpenLayers and assoc #}
+{% macro openlayers_js() %}
+
+{#
+{% for f in ["panel/Map", "data/LayerStore", "data/LayerModel"] %}
+<script type="text/javascript" src="{{c.server.static}}/js/GeoExt-2.0/src/GeoExt/{{f}}.js"></script>
+{% endfor %}
+#} 
+
+{# Openlayers #}
+<script src="{{c.server.static}}/js/OpenLayers-2.12/OpenLayers.js"></script>
+
+{# Proj4js #}
+<script src="{{c.server.static}}/js/proj4js-1.1.0/lib/proj4js-combined.js"></script>
+
+
+{# OSM stuff #} 
+<script src="{{c.server.static}}/js/osm/OpenStreetMap.js"></script>
+
+{% endmacro %}

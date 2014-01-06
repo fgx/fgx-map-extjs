@@ -1,0 +1,160 @@
+
+{% extends "_base.html" %}
+{% import "_macros.html" as macro with context %}
+
+{% set page_title = "FGx Map" %}
+
+{#=======================================================#}
+{% block header %}
+
+
+
+{{ macro.ext_js() }}
+{{ macro.openlayers_js() }}
+
+<style type="text/css">
+    html, body { height: 100% }
+    body {margin: 0px;}
+    #map {
+	  position: relative;
+      width: 100%;
+      height: 100%;
+    }
+	#fgxlogo {
+	position:fixed;
+	bottom:5px;
+	left: 20px;
+	background:transparent;
+	text-align:left;
+	vertical-align: center;
+	padding:0px;
+	width:70%;
+	height: auto;
+	font-family: arial, helvetica, sans-serif;
+	font-size: 10px;
+
+	
+}
+</style>
+
+<script type="text/javascript">
+var map;
+
+document.namespaces;
+
+function init() {
+
+	
+	var options = { 
+		units: 'm',
+		
+		// this is the map projection here
+		projection: new OpenLayers.Projection("EPSG:3572"),
+		
+		// this is the display projection, I need that to show lon/lat in degrees and not in meters
+		displayProjection: new OpenLayers.Projection("EPSG:4326"),
+		
+		// the resolutions are calculated by tilecache, when there is no resolution parameter but a bbox in
+		// tilecache.cfg it shows you resolutions for all calculated zoomlevels in your browser: 
+		// by http://yoururltothemap.org/tilecache.py/1.0.0/layername/ etc.
+		resolutions: [17650.08351954296813346446,8825.04175977148406673223,4412.52087988574203336611,2206.26043994287101668306,1103.13021997143550834153,551.56510998571775417076,275.78255499285887708538,137.89127749642943854269,68.94563874821471927135,34.47281937410735963567,17.23640968705367981784,8.61820484352683990892,4.30910242176341995446,2.15455121088170997723],
+		
+		// I set a max and min resolution, means setting available zoomlevels by default
+		maxResolution: 17650.08351954296813346446,
+		minResolution: 2.15455121088170997723,
+		
+		// maxExtent is derived by browsing the very useful map at
+		// http://nsidc.org/data/atlas/epsg_3572.html
+		maxExtent: new OpenLayers.Bounds(-2581134.058442,-5247030.984143,1937287.322561,-728609.603140),
+		
+		// zoomlevels 0-13 = 14 levels
+		zoomLevels: 14
+		};
+	
+	
+	var ak_ne_landmass = new OpenLayers.Layer.WMS( "NE Landmass", 
+		//"http://maptest.fgx.ch:81/mapnik/tilecache.py?", 
+		"http://maptest.fgx.ch:81/mapnik/mapnikwms2nd.py?&BGCOLOR=0x62A9CA&", 
+			{
+			layers: 'ak_ne_landmass', 
+			format: 'image/png',
+			isBaselayer: true 
+			}
+		);
+		
+	var ak_ne_populated = new OpenLayers.Layer.WMS( "Places", 
+		//"http://maptest.fgx.ch:81/mapnik/tilecache.py?", 
+		"http://maptest.fgx.ch:81/mapnik/mapnikwms2nd.py?", 
+			{
+			layers: 'ak_ne_populated', 
+			format: 'image/png', 
+			visibility: true,
+			transparent: true
+			}
+		);
+		
+	var relief = new OpenLayers.Layer.WMS( "Relief", 
+		//"http://maptest.fgx.ch:81/mapnik/tilecache.py?",
+		"http://maptest.fgx.ch:81/mapnik/mapnikwms2nd.py?", 
+			{ 
+			layers: 'n52w170,n52w180,n53w160,n53w170,n54w160,n54w160,n55w160,n56w130,n56w150,n56w160,n57w130,n57w150,n57w160,n57w170,n58w130,n58w150,n58w170,n59w130,n59w150,n59w160,n60w130,n60w140,n60w150,n60w160,n61w140,n61w150,n61w160,n61w170,n62w140,n62w150,n62w160,n63w140,n63w150,n63w160,n64w140,n64w150,n64w160,n64w170,n65w140,n65w150,n65w160,n66w140,n66w150,n66w160,n67w140,n67w150,n67w160,n68w140,n68w150,n68w160,n69w140,n69w150,n69w160,n70w140,n70w150,n70w160,n71w140,n71w150,n71w160,n72w150',
+			format: 'image/png',
+			transparent: true,
+			visibility: false
+			},
+			{
+			maxResolution: 17650.08351954296813346446,   /* start zoom level 0 */
+			minResolution: 137.89127749642943854269     /* stop zoom level 7 */
+			}
+		);
+		
+	
+	
+	map = new OpenLayers.Map("map", options);
+	
+	map.fractionalZoom = true;
+	
+	map.addLayers([
+		ak_ne_landmass,
+		relief,
+		ak_ne_populated
+		]);
+	
+	map.addControl(new OpenLayers.Control.Permalink('permalink'));
+	map.addControl(new OpenLayers.Control.MousePosition());
+	var ls = new OpenLayers.Control.LayerSwitcher( { roundedCorner: false } );
+	map.addControl(ls);
+	ls.maximizeControl();
+	
+	// to get the center point you can disable displayProjection and get the values in
+	// meters with the mouse position or permalink
+	var centerpoint = new OpenLayers.LonLat(-676624.2252,-3398363.62781);
+	map.setCenter(centerpoint,5);
+	
+	
+	}
+</script>
+
+{% endblock header %}
+
+
+
+{#=======================================================#}
+{% block content %}
+
+
+<div id="map"></div>
+	<div id="fgxlogo">
+	<img src="images/fgx-cap-40x30.png" alt="FGx Logo">&nbsp;&nbsp;
+	<b>FGx Mapserver</b>, © 2012 Yves Sablonier (Zurich) --- Data: Natural Earth/NED-USGS/Tomblin/Sablonier --- Projection: EPSG 3572
+	</p>
+</div>
+
+<script type="text/javascript" defer="defer">
+	init();
+</script>
+
+{% endblock %}
+
+
+
