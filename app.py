@@ -10,11 +10,14 @@ from bottle import TEMPLATE_PATH, jinja2_template as template
 
 APP_ROOT = os.path.abspath(os.path.dirname(__file__))
 
+
+
 VERSION = "0.1"
 
 class Server:
 	static = "http://static.fgx.ch"
-	navdata = "http://navdata.fgx.ch"
+	#navdata = "http://navdata.fgx.ch"
+	navdata = "http://localhost:7889"
 
 #==================================================================
 class Context(object):
@@ -153,8 +156,9 @@ def dynamic_style(ver):
 	return s
 
 #==================================================================
-bottle.debug(True)
-bottle.run(host="localhost", port="7888", reloader=True)
+if __name__ == "__main__":
+	bottle.debug(True)
+	bottle.run(host="localhost", port="7888", reloader=True)
 
 
 

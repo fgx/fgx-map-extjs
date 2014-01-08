@@ -71,7 +71,7 @@ update_flights: function(){
 			console.log("FAIL");
 		},
 		
-	})
+	});
 },
 
 
@@ -388,15 +388,12 @@ initComponent: function(){
 					"-",	
 					
 					//== FGx Menu
-					{text: "FGx", iconCls: "icoFgx", 
+					{text: "FGx", iconCls: "icoFgx", disabled: true,
 						menu: [
 							{text: "Issues", url: "http://fgx.ch/projects/fgx-map/issues",
 								handler: this.on_open_url, scope: this,
 							},
 							{text: "Git View", url: "http://git.fgx.ch/fgx-map/",
-								handler: this.on_open_url, scope: this 
-							},
-							{text: "Chili", url: "http://fgx.ch/projects/fgx-map/",
 								handler: this.on_open_url, scope: this 
 							}
 										

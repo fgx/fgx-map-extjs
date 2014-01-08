@@ -15,7 +15,7 @@ action_new_tab: function(){
 			scope: this,
 			handler: function(){
 				var r = this.get_airports_grid().getSelectionModel().getSelection().data;	
-				console.log("OPEN", r);
+				//console.log("OPEN", r);
 				//this.fireEvent("OPEN_AIRPORT", r);
 				r.lat = r.apt_center_lat84;
 				r.lon = r.apt_center_lon84;
@@ -55,10 +55,10 @@ get_airports_grid: function(){
 				this.action_new_tab()
 			],
 			columns: [ 
-				{header: 'Airport', dataIndex:'apt_ident', 
+				{header: 'Airport', dataIndex:'code', 
 					sortable: true, flex: 1, menuDisabled: true,
 					renderer: function(v, meta, rec){
-						return rec.get("apt_ident") + ": " + rec.get("apt_name_ascii");
+						return rec.get("code") + ": " + rec.get("name");
 					}
 				}
 			]
@@ -70,7 +70,7 @@ get_airports_grid: function(){
 				return;
 			}
 			this.action_new_tab().setDisabled(false);			
-			this.fetch_airport( selected[0].get("apt_ident") );
+			this.fetch_airport( selected[0].get("code") );
 			this.fireEvent("AIRPORT", selected[0].getData() );
 		}, this);
 	}
@@ -80,7 +80,7 @@ get_airports_grid: function(){
 
 fetch_airport: function(apt_ident){
 	Ext.Ajax.request({
-		url: "/ajax/airport/" + apt_ident,
+		url: NAV_SERVER + "/airport/" + apt_ident + ".json",
 		method: "GET",
 		scope: this,
 		success: function(response, opts) {
@@ -203,9 +203,9 @@ initComponent: function() {
 								var s = txtFld.getValue();
 								if(s.length > 1){
 									this.get_airports_store().load({params: {
-										apt_ident: s,
-										apt_type: this.get_apt_types(),
-										apt_size: this.get_apt_sizes()
+										code: s,
+										//apt_type: this.get_apt_types(),
+										//apt_size: this.get_apt_sizes()
 									}});
 								}
 							}
@@ -295,14 +295,14 @@ get_airports_store: function(){
 				method: "GET",
 				reader: {
 					type: "json",
-					root: 'airports'
+					root: 'rows'
 				}
 			},
 			autoLoad: false,
 			
 			remoteSort: false,
 			sortInfo: {
-				field: "apt_ident", 
+				field: "code", 
 				direction: 'ASC'
 			}
 		});
