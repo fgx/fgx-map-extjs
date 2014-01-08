@@ -64,7 +64,7 @@ get_map: function(){
 			
 			//TODO make a config zoomlevels 0-13 = 14 levels ?
 			zoomLevels: 17, 
-			//layers: this.get_layers()
+			layers: this.get_layers()
 		});
 	}
 	return this.xxxxMap;
@@ -76,14 +76,15 @@ get_map: function(){
 
 //======================================================
 // Create the Layers
-DEADget_layers: function(){
+get_layers: function(){
 	this.L = {};
-	this.L.lite = new OpenLayers.Layer.OSM.Mapnik( "Light" );
-	this.L.lite.setOpacity(0.4);	
+	//this.L.lite = new OpenLayers.Layer.OSM.Mapnik( "Light" );
+	//this.L.lite.setOpacity(0.4);	
 		
-	this.L.blip = new OpenLayers.Layer.Vector("HighLight Markers");
-	this.L.track = new OpenLayers.Layer.Vector("Track Lines Layer");	
-	this.L.fpLine = new OpenLayers.Layer.Vector("Flight Plan Line");
+	//this.L.blip = new OpenLayers.Layer.Vector("HighLight Markers");
+	//this.L.track = new OpenLayers.Layer.Vector("Track Lines Layer");	
+	//this.L.fpLine = new OpenLayers.Layer.Vector("Flight Plan Line");
+	/*
 	this.L.fpLbl = new OpenLayers.Layer.Vector("Flight Plan Labels", 
 			{
                 styleMap: new OpenLayers.StyleMap({'default':{
@@ -137,6 +138,7 @@ DEADget_layers: function(){
                 //renderers: renderer
             }
 	);
+*/
 	this.L.radarBlip = new OpenLayers.Layer.Vector(
 		"Radar Markers", 
 		{styleMap: new OpenLayers.StyleMap({
@@ -231,7 +233,7 @@ DEADget_layers: function(){
 			/*minResolution: 152.87405654907226 */    /* stop zoom level 7 */
 			/*}
 			),	*/
-		
+		/*
 		new OpenLayers.Layer.WMS(
 			"DME",
 			"http://mapnik.fgx.ch:81/tilecache.py?",
@@ -301,7 +303,7 @@ DEADget_layers: function(){
 			{layers: "FIX" , transparent: "True" , format: "image/png" 
 			}, {  visibility: false}
 		),
-				  
+		*/		  
 		/* This works for a relief when it is 3857 projection, mapnik itself can do reprojection directly,
 		but communication between tilecache and openlayers not. Has to be the same resolution. */
 				  
@@ -310,9 +312,9 @@ DEADget_layers: function(){
 				  
 		
 		/// Underlays
-		this.L.lite,
-		new OpenLayers.Layer.OSM.Mapnik( "OSM" ),
-		
+		//this.L.lite,
+		//new OpenLayers.Layer.OSM.Mapnik( "OSM" ),
+		/*
 		new OpenLayers.Layer.WMS(
 			"Landmass",
 			"http://mapnik.fgx.ch:81/tilecache.py?",
@@ -320,28 +322,28 @@ DEADget_layers: function(){
 				}, {  visibility: false}
 		),
 				  
-
+		*/
 				  
 		
 				  
 		
-		this.L.blip,
-		this.L.track,
-		this.L.radarLbl, this.L.radarBlip, 
-		this.L.awyLbl, this.L.awyLine, 
-		this.L.fpLbl, this.L.fpLine
+		//this.L.blip,
+		//this.L.track,
+		this.L.radarLbl, this.L.radarBlip
+		//this.L.awyLbl, this.L.awyLine, 
+		//this.L.fpLbl, this.L.fpLine
 		
 	];
 	//console.log("get_LAyers");
 	return LAYERS;
 },
 
-get_store: function(){
-	
+DEADget_store: function(){
+	return;
 	if(!this.xFlightsStore){
 		this.xFlightsStore = Ext.StoreMgr.lookup("flights_store");
 		this.xFlightsStore.on("load", function(sto, recs){
-			//console.log("xFlightsStore.load");
+			console.log("xFlightsStore.load");
 			this.L.radarBlip.removeAllFeatures();
 			this.L.radarLbl.removeAllFeatures();
 			var i, r;
@@ -387,6 +389,7 @@ initComponent: function() {
 	
 	this.L.line = new OpenLayers.Layer.Vector("Line");	
 	this.map.addLayer( this.L.line );
+	
 	
 }, // << initComponent	
 

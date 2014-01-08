@@ -26,7 +26,7 @@ xFlightsStore: Ext.create("Ext.data.JsonStore", {
 	storeId: "flights_store",
 	proxy: {
 		type: "ajax",
-		url: '/ajax/mpnet/flights/crossfeed',
+		url: "http://crossfeed.fgx.ch/flights.json",
 		reader :{
 			type: "json",
 			root: 'flights'
@@ -40,9 +40,10 @@ xFlightsStore: Ext.create("Ext.data.JsonStore", {
 	autoLoad: false,
 }),
 update_flights: function(){
-	//Ext.getStore("flights_store").load();
+	Ext.getStore("flights_store").load();
+	return;
 	Ext.Ajax.request({
-		url: "/ajax/mpnet/flights/crossfeed",
+		url: "http://crossfeed.fgx.ch/flights.json",
 		method: "GET",
 		scope: this,
 		success: function(response, opts) {
@@ -50,22 +51,27 @@ update_flights: function(){
 			//console.log(data);
 			var sto = Ext.getStore("flights_store");
 			sto.each( function(rec){
-				rec.set("flag", 1);
+				if(  rec.get("flag") > 0 ){
+					rec.set("flag", rec.get("flag") + 1);
+				}else{
+					rec.set("flag", 1);
+				}
 			}, this);
 			
 			var flights = data.flights;
-			for(var i =0; i < flights.length; i++){
+			for(var i = 0; i < flights.length; i++){
 				var fly = flights[i];
-				var r = sto.getById(fly.fid);
+				var r = sto.getById(fly.callsign);
 				if(r){
 					for(var ki in fly){
 						r.set(ki, fly[ki]);
 					}
-					r.set("flag", null);
+					r.set("flag", 0);
 				}else{
 					sto.add(fly);
 				}
 			}
+			sto.fireEvent("UPDATED", flights);
 		},
 		failure: function(response, opts) {
 			console.log("FAIL");

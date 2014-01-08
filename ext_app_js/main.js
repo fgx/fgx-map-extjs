@@ -76,7 +76,7 @@ Ext.define('mAirport', {
 
 Ext.define('mFlight', {
 	extend: 'Ext.data.Model',
-	idProperty: 'fid',
+	idProperty: 'callsign',
 	fields: [ 	
 		{name: "fid", type: 'string'},
 		{name: "callsign", type: 'string'},
@@ -88,7 +88,7 @@ Ext.define('mFlight', {
 		{name: "spd_kts", type: 'int'},
 		//{name: "alt_trend", type: 'string'},
 		{name: "hdg", type: 'int'},
-		{name: 'flag', type: 'int', defaultValue: null},
+		{name: 'flag', type: 'int', defaultValue: 0},
 		{name: 'check', type: 'int'}
 	],
 });

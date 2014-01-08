@@ -15,7 +15,9 @@ APP_ROOT = os.path.abspath(os.path.dirname(__file__))
 VERSION = "0.1"
 
 class Server:
-	static = "http://static.fgx.ch"
+	#static = "http://static.fgx.ch"
+	static = "http://localhost:81/fgx-static"
+	
 	#navdata = "http://navdata.fgx.ch"
 	navdata = "http://localhost:7889"
 
@@ -36,18 +38,20 @@ def new_context():
 
 #==================================================================
 
-@route("/", method="GET")
-def index():
-	c = new_context()
-	return template("map-ext.html", c=c)
-
-
 @route("/fgx_ext/<ver>/<filename:path>", method="GET")
 def static_ext_app(ver, filename):
 	"""Handle the ext spplication.js 
 	   Not using the version string, its just there for caching the path
     """
 	return bottle.static_file(filename, root=APP_ROOT + "/ext_app_js") 
+
+
+@route("/images/<filename:path>", method="GET")
+def static_style(filename):
+	"""Handler the images
+	   Not using the version string, its just there for caching the path
+    """
+	return bottle.static_file(filename, root=APP_ROOT + "/images") 
 
 
 @route("/style/<ver>/<filename:path>", method="GET")
@@ -59,7 +63,7 @@ def static_style(ver, filename):
 
 
 
-@route("/dynamic/{ver}/icons.css", method="GET")
+@route("/dynamic/<ver>/icons.css", method="GET")
 def dynamic_style(ver):
 	
 
@@ -153,12 +157,22 @@ def dynamic_style(ver):
 	s += "\n\n" # incase
 	
 	bottle.response.content_type = 'text/css'
+	#print s
 	return s
+
+
+@route("/", method="GET")
+def index():
+	c = new_context()
+	return template("map-ext.html", c=c)
+
+
 
 #==================================================================
 if __name__ == "__main__":
+	#dynamic_style("foo")
 	bottle.debug(True)
-	bottle.run(host="localhost", port="7888", reloader=True)
+	bottle.run(host="localhost", port="7888", reloader=True, debug=True)
 
-
+	
 

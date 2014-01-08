@@ -50,7 +50,7 @@ initComponent: function() {
 		store: Ext.StoreMgr.lookup("flights_store"),
 		columns: [ 
 			{header: 'Flight ID',  dataIndex:'fid', sortable: true, 
-				width: 100, menuDisabled: true,
+				width: 100, menuDisabled: true, hidden: true,
 				renderer: function(v, meta, rec){
 					if(rec.get("flag") > 0){
 						meta.style = "background-color: pink;";
@@ -99,7 +99,7 @@ initComponent: function() {
 						meta.style = "background-color: pink;";
 						return v
 					}
-					return "-";
+					return v; // "-";
 				}
 			}
 		],		

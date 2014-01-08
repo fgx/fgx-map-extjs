@@ -1,5 +1,9 @@
 /*global Ext: false, console: false, FGx: false */
 
+/* Map basic is the basic map panel, with the base layer, navaids, airport toolbar and zoom etc footer bar
+ * Also includes functions to show radar 
+ * 
+ */
 
 Ext.define("FGx.map.MapBasic", {
 
@@ -23,23 +27,6 @@ get_bookmark_button: function(){
 },
 
 
-get_store: function(){
-	if(!this.xFlightsStore){
-		this.xFlightsStore = Ext.StoreMgr.lookup("flights_store");
-		this.xFlightsStore.on("load", function(sto, recs){
-			//console.log("xFlightsStore.load");
-			this.L.radarBlip.removeAllFeatures();
-			this.L.radarLbl.removeAllFeatures();
-			var i, r;
-			var rec_len = recs.length;
-			for(i=0; i < rec_len; i++){
-				r = recs[i].data;
-				this.show_radar(r.callsign, r.lat, r.lon, r.hdg, r.altitude);
-			}
-		}, this);
-	}
-	return this.xFlightsStore;
-},
 	
 //===========================================================
 initComponent: function() {
@@ -242,6 +229,8 @@ initComponent: function() {
 			this.down("displayfield[name=lat]").setValue(pos.lat);
 			this.down("displayfield[name=lon]").setValue(pos.lon);
 	});
+	
+	this.register_flights_store();
 
 }, //< initComponent()
 
@@ -289,7 +278,8 @@ DEADpan_to: function(obj, zoom){
 	
 },
 
-update_radar: function(recs){
+DEADupdate_radar: function(recs){
+	console.log("update_radar");
 	this.L.radarBlip.removeAllFeatures();
 	this.L.radarLbl.removeAllFeatures();
 	var recs_length = recs.length;
@@ -299,10 +289,37 @@ update_radar: function(recs){
 	};
 },
 
+//this.xFlightsGrid.getStore().on("load", function(store, recs, idx){
+//	this.get_map_panel().update_radar(recs);
+//}, this);
+
+register_flights_store: function(){
+	console.log("register_flights_store");
+	if(!this.xFlightsStore){
+		this.xFlightsStore = Ext.StoreMgr.lookup("flights_store");
+		this.xFlightsStore.on("load", function(sto, recs){
+			console.log("xFlightsStore.UPDATED", recs);
+			this.L.radarBlip.removeAllFeatures();
+			this.L.radarLbl.removeAllFeatures();
+			
+			//var i, r;
+			var rec_len = recs.length;
+			for(var i = 0; i < rec_len; i++){
+			//this.xFlightsStore.each( function(rec){
+				var r = recs[i].raw
+				//console.log(r);
+				this.show_radar(r.callsign, r.lat, r.lon, r.hdg, r.altitude);
+			};
+		}, this);
+	}
+	return this.xFlightsStore;
+},
+
+
 //==========================================================
 // Shows aircraft on the RADAR map, with callsign (two features, poor openlayer)
 show_radar: function show_radar(mcallsign, mlat, mlon, mheading, maltitude){
-
+	//console.log("show_radar");
 	// remove xisting iamge/label if exist
 	/*
 	var existing_img = radarImageMarkers.getFeatureBy("_callsign", mcallsign);
@@ -360,6 +377,53 @@ show_radar: function show_radar(mcallsign, mlat, mlon, mheading, maltitude){
 	this.L.radarLbl.addFeatures([lblFeat]);	
 	
 },
+
+add_airport: function(apt){
+
+	//c//onsole.log(mcallsign, mlat, mlon, mheading, maltitude)
+	var pointImg = new OpenLayers.Geometry.Point(apt.lon, apt.lat
+						).transform(this.get_display_projection(), this.get_map().getProjectionObject() );	
+
+	// Add Image
+	var imgFeat = new OpenLayers.Feature.Vector(pointImg, {
+				hdg: mheading
+				}); 
+	imgFeat._callsign = mcallsign;
+	//this.L.radarBlip.addFeatures([imgFeat]);	
+	//console.log(mcallsign, mlat, mlon, mheading, maltitude);
+	
+	var gxOff = 4;
+	var gyOff = -8;
+
+	var lxOff = 6;
+	var lyOff = 2;
+	
+	// move the label offset
+	if(mheading > 0  && mheading < 90){
+		lyOff = lyOff - 15;
+		gyOff = gyOff  + 15 ;
+	}else if( mheading > 90 && mheading < 150){
+		lyOff = lyOff + 5;
+		gyOff = gyOff - 5;
+	}else if( mheading > 270 && mheading < 360){
+		lyOff = lyOff - 10;
+		gyOff = gyOff  + 10;
+		
+	}
+
+	// Add callsign label as separate feature, to have a background color (graphic) with offset
+	var pointLabel = new OpenLayers.Geometry.Point(mlon, mlat
+					).transform(this.get_display_projection(),  this.get_map().getProjectionObject() );
+	var lblFeat = new OpenLayers.Feature.Vector(pointLabel, {
+                callsign: mcallsign,
+				lxOff: lxOff, lyOff: lyOff,
+				gxOff: gxOff, gyOff: gyOff
+				});
+	lblFeat._callsign = mcallsign;
+	this.L.radarLbl.addFeatures([lblFeat]);	
+	
+},
+
 
 on_goto: function(butt){
 	//var lonLat = new OpenLayers.LonLat(butt.lon, butt.lat
