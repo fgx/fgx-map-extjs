@@ -1,5 +1,5 @@
 {
-	"app": {"host" : "localhost", "port": 7887},
+	"app": {"host" : "localhost", "port": 7888},
 	"servers": 
 		{
 		"navdata": "http://navdata.fgx.ch",
