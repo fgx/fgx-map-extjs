@@ -104,7 +104,7 @@ initComponent: function() {
 					{text: "NDB&nbsp;", enableToggle: true, iconCls: "icoNdb", navaid: "NDB", 
 						toggleHandler: this.on_nav_toggled, scope: this
 					},
-					{text: "Fix&nbsp;&nbsp;&nbsp;", enableToggle: true, iconCls: "icoOff", navaid: "FIX", 
+					{text: "Fix&nbsp;&nbsp;&nbsp;", enableToggle: true, iconCls: "icoFix", navaid: "FIX", 
 						toggleHandler: this.on_nav_toggled, scope: this
 					}
 					//{text: "VORTAC", enableToggle: true, iconCls: "icoOff", navaid: "NDB", 
@@ -117,7 +117,7 @@ initComponent: function() {
 				title: 'Airports', 
 				columns: 6,
 				items: [
-					{text: "Airports", enableToggle: true, iconCls: "icoAirport", apt: "Airport", 
+					{text: "Airports", enableToggle: true, iconCls: "icoAirport", apt: "airport", pressed: true,
 						toggleHandler: this.on_apt_toggled, scope: this},
 					{text: "Seaports", enableToggle: true, iconCls: "icoOff", apt: "Seaport", disabled: true,
 						toggleHandler: this.on_apt_toggled, scope: this},
@@ -295,7 +295,8 @@ on_nav_toggled: function(butt, checked){
 
 on_apt_toggled: function(butt, checked){
  	//butt.setIconCls( checked ? "icoOn" : "icoOff" );
-	this.map.getLayersByName(butt.apt)[0].setVisibility(checked);
+	// TODO : this back when gral is ready
+	//this.map.getLayersByName(butt.apt)[0].setVisibility(checked);
 },
 		   
 on_civmil_mode: function(butt, checked){

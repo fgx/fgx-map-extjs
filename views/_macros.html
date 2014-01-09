@@ -5,23 +5,23 @@
 
 
 
-<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/adapter/ext/ext-base.js"></script>
-<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/ext-all.js"></script>
+<script type="text/javascript" src="{{c.static_server}}/js/ext-{{c.ext_ver}}/adapter/ext/ext-base.js"></script>
+<script type="text/javascript" src="{{c.static_server}}/js/ext-{{c.ext_ver}}/ext-all.js"></script>
 
-<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridSorter.js"></script>
-<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridColumnResizer.js"></script>
-<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridNodeUI.js"></script>
-<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridLoader.js"></script>
-<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridColumns.js"></script>
-<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGrid.js"></script>
+<script type="text/javascript" src="{{c.static_server}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridSorter.js"></script>
+<script type="text/javascript" src="{{c.static_server}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridColumnResizer.js"></script>
+<script type="text/javascript" src="{{c.static_server}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridNodeUI.js"></script>
+<script type="text/javascript" src="{{c.static_server}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridLoader.js"></script>
+<script type="text/javascript" src="{{c.static_server}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGridColumns.js"></script>
+<script type="text/javascript" src="{{c.static_server}}/js/ext-{{c.ext_ver}}/examples/ux/treegrid/TreeGrid.js"></script>
 
 
-<link rel="stylesheet" type="text/css" href="{{c.server.static}}/js/ext-{{c.ext_ver}}/resources/css/ext-all.css" />
+<link rel="stylesheet" type="text/css" href="{{c.static_server}}/js/ext-{{c.ext_ver}}/resources/css/ext-all.css" />
 
 <link rel="stylesheet" type="text/css" href="/dynamic/{{c.ver}}/icons.css" /> 
 
 <script>
-var EXT_CHART_SWF = "{{c.server.static}}/js/ext-{{c.ext_ver}}/resources/charts.swf";
+var EXT_CHART_SWF = "{{c.static_server}}/js/ext-{{c.ext_ver}}/resources/charts.swf";
 </script>
 
 
@@ -30,9 +30,9 @@ var EXT_CHART_SWF = "{{c.server.static}}/js/ext-{{c.ext_ver}}/resources/charts.s
 {% macro ext_js4(ver="4.2.1.883", ext_theme="xtheme-gray.css") %}
 
 
-<script type="text/javascript" src="{{c.server.static}}/js/ext-{{c.ext_ver}}/ext-all.js"></script>
+<script type="text/javascript" src="{{c.static_server}}/js/ext-{{c.ext_ver}}/ext-all.js"></script>
 
-<link rel="stylesheet" type="text/css" href="{{c.server.static}}/js/ext-{{c.ext_ver}}/resources/css/ext-all.css" />
+<link rel="stylesheet" type="text/css" href="{{c.static_server}}/js/ext-{{c.ext_ver}}/resources/css/ext-all.css" />
 
 <link rel="stylesheet" type="text/css" href="/dynamic/{{c.ver}}/icons.css" /> 
 {# GeoExt: "/fgx-static/js/GeoExt-2.0/src/GeoExt", #}
@@ -40,8 +40,8 @@ var EXT_CHART_SWF = "{{c.server.static}}/js/ext-{{c.ext_ver}}/resources/charts.s
 Ext.Loader.setConfig({
 	enabled: true,
 	paths: {
-		Ext: "{{c.server.static}}/js/ext-{{ver}}/",
-		GeoExt: "{{c.server.static}}/js/GeoExt-2.0/src/GeoExt",
+		Ext: "{{c.static_server}}/js/ext-{{ver}}/",
+		GeoExt: "{{c.static_server}}/js/GeoExt-2.0/src/GeoExt",
 		FGx: '/fgx_ext/{{c.ver}}'
 	}
 });
@@ -60,18 +60,18 @@ Ext.Ajax.disableCaching = true;
 
 {#
 {% for f in ["panel/Map", "data/LayerStore", "data/LayerModel"] %}
-<script type="text/javascript" src="{{c.server.static}}/js/GeoExt-2.0/src/GeoExt/{{f}}.js"></script>
+<script type="text/javascript" src="{{c.static_server}}/js/GeoExt-2.0/src/GeoExt/{{f}}.js"></script>
 {% endfor %}
 #} 
 
 {# Openlayers #}
-<script src="{{c.server.static}}/js/OpenLayers-2.13.1/OpenLayers.js"></script>
+<script src="{{c.static_server}}/js/OpenLayers-2.13.1/OpenLayers.js"></script>
 
 {# Proj4js #}
-<script src="{{c.server.static}}/js/proj4js-1.1.0/lib/proj4js-combined.js"></script>
+<script src="{{c.static_server}}/js/proj4js-1.1.0/lib/proj4js-combined.js"></script>
 
 
 {# OSM stuff #} 
-<script src="{{c.server.static}}/js/osm/OpenStreetMap.js"></script>
+<script src="{{c.static_server}}/js/osm/OpenStreetMap.js"></script>
 
 {% endmacro %}

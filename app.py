@@ -1,25 +1,25 @@
 #!/usr/bin/python
 
 import os
+import json
+
 from string import Template
 
 import bottle
 from bottle import route
 from bottle import TEMPLATE_PATH, jinja2_template as template
 
+DEBUG = False
+
+VERSION = "0.1"
 
 APP_ROOT = os.path.abspath(os.path.dirname(__file__))
 
 
+## Location of servers are overriden from config.json
+STATIC_SERVER = "http://static.fgx.ch"
+NAVDATA_SERVER = "http://navdata.fgx.ch"
 
-VERSION = "0.1"
-
-class Server:
-	#static = "http://static.fgx.ch"
-	static = "http://localhost:81/fgx-static"
-	
-	#navdata = "http://navdata.fgx.ch"
-	navdata = "http://localhost:7889"
 
 #==================================================================
 class Context(object):
@@ -29,9 +29,11 @@ class Context(object):
 def new_context():
 	"""Create new context and set some default"""
 	ob = Context()
-	ob.server = Server
 	ob.ver = VERSION
 	ob.ext_ver = "4.1.1a"
+	ob.navdata_server = NAVDATA_SERVER
+	ob.static_server = STATIC_SERVER
+	ob.crossfeed_url = "http://crossfeed.fgx.ch/flights.json"
 	return ob
 
 
@@ -77,9 +79,10 @@ def dynamic_style(ver):
 	local_icons["icoFix"] = "vfr_fix.png"
 	local_icons["icoNdb"] = "ndb.16.png"
 	local_icons["icoVor"] = "vor.png"
+	local_icons["icoDme"] = "dme.png"
 	local_icons["icoClr"] = "go.gif"
 
-
+	##===================================
 	## static_icons are the fam fam icon set at http://static.fgx.ch/icons/famfam_silk/
 	static_icons = {}
 	
@@ -153,7 +156,7 @@ def dynamic_style(ver):
 	s += "\n\n" # incase
 	
 	for k in sorted(static_icons.keys()):
-		s += ".%s{background-image: url('%s/icons/famfam_silk/%s') !important; background-repeat: no-repeat;}\n" %  (k, Server.static, static_icons[k])
+		s += ".%s{background-image: url('%s/icons/famfam_silk/%s') !important; background-repeat: no-repeat;}\n" %  (k, STATIC_SERVER, static_icons[k])
 	s += "\n\n" # incase
 	
 	bottle.response.content_type = 'text/css'
@@ -170,9 +173,15 @@ def index():
 
 #==================================================================
 if __name__ == "__main__":
-	#dynamic_style("foo")
-	bottle.debug(True)
-	bottle.run(host="localhost", port="7888", reloader=True, debug=True)
+	
+	## Load configuration
+	conf = json.load(open(APP_ROOT + "/config.json", "r"))
+	STATIC_SERVER = conf['servers']['static']
+	NAVDATA_SERVER = conf['servers']['navdata']
+	DEBUG = conf['debug']
+	
+	bottle.debug(DEBUG)
+	bottle.run(host="localhost", port="7888", reloader=DEBUG, debug=DEBUG)
 
 	
 

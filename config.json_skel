@@ -1,4 +1,7 @@
 {"servers": 
-	{"navdata": "http://navdata.fgx.ch"},
-	{"static": "http://static.fgx.ch"}
+	{
+	"navdata": "http://navdata.fgx.ch",
+	"static": "http://static.fgx.ch"
+	},
+"debug": false
 }

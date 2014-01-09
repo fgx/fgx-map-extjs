@@ -26,7 +26,7 @@ xFlightsStore: Ext.create("Ext.data.JsonStore", {
 	storeId: "flights_store",
 	proxy: {
 		type: "ajax",
-		url: "http://crossfeed.fgx.ch/flights.json",
+		url: CROSSFEED_URL,
 		reader :{
 			type: "json",
 			root: 'flights'
@@ -43,7 +43,7 @@ update_flights: function(){
 	Ext.getStore("flights_store").load();
 	return;
 	Ext.Ajax.request({
-		url: "http://crossfeed.fgx.ch/flights.json",
+		url: CROSSFEED_URL,
 		method: "GET",
 		scope: this,
 		success: function(response, opts) {
@@ -162,15 +162,6 @@ on_network_status_panel: function(butt, checked){
 		this.get_tab_panel().add(this.widgets.NetworkStatusPanel);
 	}
 	this.get_tab_panel().setActiveTab(this.widgets.NetworkStatusPanel);
-},
-on_db_browser_widget: function(butt, checked){
-	if(!this.widgets.DbBrowser){
-		this.widgets.DbBrowser = Ext.create("FGx.dev.DbBrowser", {
-			closable: true
-		});
-		this.get_tab_panel().add(this.widgets.DbBrowser);
-	}
-	this.get_tab_panel().setActiveTab(this.widgets.DbBrowser);
 },
 on_routes_browser_widget: function(butt, checked){
 	if(!this.widgets.RoutesBrowser){
@@ -295,15 +286,15 @@ initComponent: function(){
 							
 							{text: "USA" , disabled: true},
 							"-",
-							{text: "Amsterdam", aptIdent: "EHAM", lat: 52.306, lon:4.7787, zoom: 10,
+							{text: "Amsterdam", aptIdent: "EHAM", lat: 52.306, lon:4.7787, zoom: 10, disabled: true,
 								handler: this.on_goto, scope: this},
-							{text: "London", aptIdent: "EGLL",  lat: 51.484, lon: -0.1510, zoom: 10,
+							{text: "London", aptIdent: "EGLL",  lat: 51.484, lon: -0.1510, zoom: 10, disabled: true,
 								handler: this.on_goto, scope: this},
-							{text: "Paris", aptIdent: "LFPG", lat: 48.994, lon: 2.650, zoom: 10,
+							{text: "Paris", aptIdent: "LFPG", lat: 48.994, lon: 2.650, zoom: 10, disabled: true,
 								handler: this.on_goto, scope: this},
-							{text: "San Fransisco", aptIdent: "KSFO", lat: 37.621302, lon: -122.371216, zoom: 10,
+							{text: "San Fransisco", aptIdent: "KSFO", lat: 37.621302, lon: -122.371216, zoom: 10, disabled: true,
 								handler: this.on_goto, scope: this},
-							{text: "Zurich", aptIdent: "LSZH", lat: 47.467, lon: 8.5597, zoom: 10,
+							{text: "Zurich", aptIdent: "LSZH", lat: 47.467, lon: 8.5597, zoom: 10, disabled: true,
 								handler: this.on_goto, scope: this},
 						]
 					},
@@ -317,15 +308,17 @@ initComponent: function(){
 					{text: "Flight Plans", iconCls: "icoFlightPlans", xtype: "splitbutton",
 						handler: this.on_flight_plans_widget, scope: this,
 						menu:[
-							//TODO: new FGx.UrlAction({text: "RouteFinder - rfinder.asalink.net/free/", url: //"http://rfinder.asalink.net/free/", M: this}),
+							 {text: "RouteFinder - rfinder.asalink.net/free/", 
+								url: "http://rfinder.asalink.net/free/",
+								handler: this.on_open_url, scope: this }
 						]
 					},
 					"-",
-					{text: "Network Status", iconCls: "icoMpServers", 
+					{text: "Network Status", iconCls: "icoMpServers",  disabled: true,
 						handler: this.on_network_status_panel, scope: this
 					},
 					"-",
-					{iconCls: "icoDev", tooltip: "Developer", text: "Developer",
+					{iconCls: "icoDev", tooltip: "Developer", text: "Developer", disabled: true,
 						menu: [
 							{iconCls: "icoDocs", text: "Dev Docs", url: "/dev_docs", handler: this.on_open_url, scope: this},
 							"-",
@@ -356,19 +349,19 @@ initComponent: function(){
 						toggleGroup: "refresh_rate",  refresh_rate: 0,  pressed: this.refresh_rate == 0,
 						toggleHandler: this.on_refresh_toggled,	scope: this
 					},
-		   		   	{text:  "1" ,  iconCls: this.refresh_rate == 1 ? "icoOn" : "icoOff", enableToggle: true,    
-						width: this.tbw, allowDepress: false, pressed: this.refresh_rate == 1,
-						toggleGroup: "refresh_rate",  refresh_rate: 1, 
-						toggleHandler: this.on_refresh_toggled,	scope: this
-					},
-		   		   	{text:  "2", iconCls: this.refresh_rate == 2 ? "icoOn" : "icoOff", enableToggle: true,    
+		   		   	{text:  "3", iconCls: this.refresh_rate == 3 ? "icoOn" : "icoOff", enableToggle: true,    
 						width: this.tbw, allowDepress: false, pressed: this.refresh_rate == 2,
 						toggleGroup: "refresh_rate",  refresh_rate: 2, 
 						toggleHandler: this.on_refresh_toggled,	scope: this
 					},
-		   			{text:  "3", iconCls: this.refresh_rate == 3 ? "icoOn" : "icoOff", enableToggle: true,   
+		   			{text:  "4", iconCls: this.refresh_rate == 4 ? "icoOn" : "icoOff", enableToggle: true,   
 						width: this.tbw, allowDepress: false,  pressed: this.refresh_rate == 3,
 						toggleGroup: "refresh_rate",  refresh_rate: 3, 
+						toggleHandler: this.on_refresh_toggled,	scope: this
+					},
+		   		   	{text:  "5" ,  iconCls: this.refresh_rate == 5 ? "icoOn" : "icoOff", enableToggle: true,    
+						width: this.tbw, allowDepress: false, pressed: this.refresh_rate == 1,
+						toggleGroup: "refresh_rate",  refresh_rate: 1, 
 						toggleHandler: this.on_refresh_toggled,	scope: this
 					},
 		   			{text:  "6", iconCls: this.refresh_rate == 6 ? "icoOn" : "icoOff", enableToggle: true,   
