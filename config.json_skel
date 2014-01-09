@@ -1,0 +1,4 @@
+{"servers": 
+	{"navdata": "http://navdata.fgx.ch"},
+	{"static": "http://static.fgx.ch"}
+}

@@ -12,7 +12,6 @@ get_display_projection: function(){
 },
 
 
-
 get_map: function(){
 	if(!this.xxxxMap){
 		this.xxxxMap =  new OpenLayers.Map({
@@ -20,10 +19,10 @@ get_map: function(){
 			units: 'm',
 			// this is the map projection here
 			projection: new OpenLayers.Projection("EPSG:3857"), // this.get_projection(),
-			//sphericalMercator: true,
+			sphericalMercator: false,
 			
 			// this is the display projection, I need that to show lon/lat in degrees and not in meters
-			displayProjection: this.get_display_projection(),
+			displayProjection: new OpenLayers.Projection("EPSG:4326"),
 			
 			// the resolutions are calculated by tilecache, when there is no resolution parameter but a bbox in
 			// tilecache.cfg it shows you resolutions for all calculated zoomlevels in your browser: 
@@ -211,7 +210,88 @@ get_layers: function(){
 			})
 		}
 	);
+	this.L.airport =  new OpenLayers.Layer.Vector(
+		"Airport Label", 
+		{
+			styleMap:  new OpenLayers.StyleMap({
+				"default": {
+					fill: true,
+					fillOpacity: 1,
+					fillColor: "black",
+					strokeColor: "green",
+					strokeWidth: 1,
 
+					//graphic: false,
+					externalGraphic: "/images/apt.png",
+					graphicWidth: 14,
+					graphicHeight: 14,
+					graphicOpacity: 1.0,
+					graphicXOffset: -7,
+					graphicYOffset: -7,
+					
+					
+					fontColor: "black",
+					fontSize: "10pt",
+					fontFamily: "sans-serif",
+					fontWeight: "bold",
+					labelAlign: "left",
+					labelXOffset: 10, 
+					//labelYOffset: "${lyOff}", 
+					label : "${code}"
+					//rotation : "${planerotation}",
+
+				},
+				"select": {
+					fillColor: "black",
+					strokeColor: "yellow",
+					pointRadius: 12,
+					fillOpacity: 1
+				}
+
+			})
+		}
+	);
+	this.L.vor =  new OpenLayers.Layer.Vector(
+		"Airport Label", 
+		{
+			styleMap:  new OpenLayers.StyleMap({
+				"default": {
+					fill: true,
+					fillOpacity: 1,
+					fillColor: "black",
+					strokeColor: "green",
+					strokeWidth: 1,
+
+					//graphic: false,
+					externalGraphic: "/images/vor.png",
+					graphicWidth: 14,
+					graphicHeight: 14,
+					graphicOpacity: 1.0,
+					graphicXOffset: -7,
+					graphicYOffset: -7,
+					
+					
+					fontColor: "green",
+					fontSize: "10pt",
+					fontFamily: "sans-serif",
+					fontWeight: "bold",
+					labelAlign: "left",
+					labelXOffset: 10, 
+					//labelYOffset: "${lyOff}", 
+					label : "${code}"
+					//rotation : "${planerotation}",
+
+				},
+				"select": {
+					fillColor: "black",
+					strokeColor: "yellow",
+					pointRadius: 12,
+					fillOpacity: 1
+				}
+
+			})
+		}
+	);
 	var LAYERS = [
 		//=================================================
 		// Overlay
@@ -329,7 +409,8 @@ get_layers: function(){
 		
 		//this.L.blip,
 		//this.L.track,
-		this.L.radarLbl, this.L.radarBlip
+		this.L.radarLbl, this.L.radarBlip,
+		this.L.airport, this.L.vor
 		//this.L.awyLbl, this.L.awyLine, 
 		//this.L.fpLbl, this.L.fpLine
 		
@@ -338,25 +419,7 @@ get_layers: function(){
 	return LAYERS;
 },
 
-DEADget_store: function(){
-	return;
-	if(!this.xFlightsStore){
-		this.xFlightsStore = Ext.StoreMgr.lookup("flights_store");
-		this.xFlightsStore.on("load", function(sto, recs){
-			console.log("xFlightsStore.load");
-			this.L.radarBlip.removeAllFeatures();
-			this.L.radarLbl.removeAllFeatures();
-			var i, r;
-			var rec_len = recs.length;
-			for(i=0; i < rec_len; i++){
-				r = recs[i].data;
-				this.show_radar(r.callsign, r.lat, r.lon, r.hdg, r.altitude);
-			}
-		}, this);
-	}
-	return this.xFlightsStore;
-},
-	
+
 //===========================================================
 initComponent: function() {
 	

@@ -85,7 +85,7 @@ initComponent: function() {
 				title: 'Navigation Aids',
 				columns: 5,
 				items: [
-					{xtype: "splitbutton", text: "VOR", pressed: false, enableToggle: true,  iconCls: "icoOff", navaid: "VOR", 
+					{xtype: "splitbutton", text: "VOR", pressed: false, enableToggle: true,  iconCls: "icoVor", navaid: "VOR", 
 						toggleHandler: this.on_nav_toggled, scope: this,
 						menu: {
 							items: [
@@ -93,7 +93,7 @@ initComponent: function() {
 							]
 						}
 					},
-					{xtype: "splitbutton", text: "DME", enableToggle: true,  iconCls: "icoOff", navaid: "DME", 
+					{xtype: "splitbutton", text: "DME", enableToggle: true,  iconCls: "icoDme", navaid: "DME", 
 						toggleHandler: this.on_nav_toggled,  scope: this,
 						menu: {
 							items: [
@@ -101,7 +101,7 @@ initComponent: function() {
 							]
 						}
 					},
-					{text: "NDB&nbsp;", enableToggle: true, iconCls: "icoOff", navaid: "NDB", 
+					{text: "NDB&nbsp;", enableToggle: true, iconCls: "icoNdb", navaid: "NDB", 
 						toggleHandler: this.on_nav_toggled, scope: this
 					},
 					{text: "Fix&nbsp;&nbsp;&nbsp;", enableToggle: true, iconCls: "icoOff", navaid: "FIX", 
@@ -117,11 +117,11 @@ initComponent: function() {
 				title: 'Airports', 
 				columns: 6,
 				items: [
-					{text: "Airports", enableToggle: true, iconCls: "icoOff", apt: "Airport", 
+					{text: "Airports", enableToggle: true, iconCls: "icoAirport", apt: "Airport", 
 						toggleHandler: this.on_apt_toggled, scope: this},
-					{text: "Seaports", enableToggle: true, iconCls: "icoOff", apt: "Seaport", 
+					{text: "Seaports", enableToggle: true, iconCls: "icoOff", apt: "Seaport", disabled: true,
 						toggleHandler: this.on_apt_toggled, scope: this},
-					{text: "Heliports", enableToggle: true, iconCls: "icoOff", apt: "Heliport", 
+					{text: "Heliports", enableToggle: true, iconCls: "icoOff", apt: "Heliport",  disabled: true,
 						toggleHandler: this.on_apt_toggled, scope: this},
 					//{text: "Minor", enableToggle: true, iconCls: "icoOff", apt: "minor", toggleHandler: this.on_apt_toggled},
 					//{text: "Small", enableToggle: true, iconCls: "icoOff", apt: "small", toggleHandler: this.on_apt_toggled},
@@ -229,12 +229,54 @@ initComponent: function() {
 			this.down("displayfield[name=lat]").setValue(pos.lat);
 			this.down("displayfield[name=lon]").setValue(pos.lon);
 	});
+	this.map.events.register("moveend", this, this.on_map_moved );
 	
 	this.register_flights_store();
 
 }, //< initComponent()
 
-
+on_map_moved: function(evt){
+	
+	
+	console.log("zoom=", this.map.getZoom());
+	if ( this.map.getZoom() < 7 ){
+		return;
+	}
+	//var extent = this.map.getExtent()
+	//console.log("extent", extent, map.getZoom());
+	
+	var ll = this.map.getExtent().transform( new OpenLayers.Projection("EPSG:3857"), new OpenLayers.Projection("EPSG:4326"));
+	//console.log("ll", ll);
+	//return;
+	//console.log( NAV_SERVER + "/all.json?bbox=" + ll.toBBox())
+	Ext.Ajax.request({
+		url: NAV_SERVER + "/all.json?bbox=" + ll.left + "," + ll.bottom + "," + ll.right + "," + ll.top,
+		method: "GET",
+		scope: this,
+		success: function(response, opts) {
+			var data = Ext.decode(response.responseText);
+			//console.log(data);
+			this.L.airport.removeAllFeatures();
+			this.L.vor.removeAllFeatures();
+			//var map = this.xMapPanel.get_map()
+			for( var a in data.rows) {
+				//console.log(data.rows[a]);
+				var rr = data.rows[a];
+				if(rr.ntype == "apt"){
+					this.add_airport(rr);
+					
+				}else if(rr.ntype == "vor"){
+					this.add_vor(rr);
+				}
+			}
+			
+		},
+		failure: function(response, opts) {
+			console.log("FAIL");
+		},
+		
+	})
+},
 
 on_base_layer: function(butt, checked){
 	//console.log(butt.xLayer);
@@ -247,18 +289,18 @@ on_base_layer: function(butt, checked){
 },
 
 on_nav_toggled: function(butt, checked){
-	butt.setIconCls( checked ? "icoOn" : "icoOff" );
+	//butt.setIconCls( checked ? "icoOn" : "icoOff" );
 	this.map.getLayersByName(butt.navaid)[0].setVisibility(checked);
 },
 
 on_apt_toggled: function(butt, checked){
- 	butt.setIconCls( checked ? "icoOn" : "icoOff" );
+ 	//butt.setIconCls( checked ? "icoOn" : "icoOff" );
 	this.map.getLayersByName(butt.apt)[0].setVisibility(checked);
 },
 		   
 on_civmil_mode: function(butt, checked){
  // TODO
-	console.log(butt.xCivMilMode);
+	//console.log(butt.xCivMilMode);
 	var show_mil = butt.xCivMilMode != "civilian";
 	//Ext.getCmp("fgx-vortac").setVisible( show_mil )
 	//Ext.getCmp("fgx-mil-airports").setVisible( show_mil )
@@ -278,27 +320,13 @@ DEADpan_to: function(obj, zoom){
 	
 },
 
-DEADupdate_radar: function(recs){
-	console.log("update_radar");
-	this.L.radarBlip.removeAllFeatures();
-	this.L.radarLbl.removeAllFeatures();
-	var recs_length = recs.length;
-	for(var i = 0; i < recs_length; i++){
-		var rec = recs[i];
-		this.show_radar (rec.get("callsign"), rec.get("lat"), rec.get("lon"), rec.get("hdg"), rec.get("alt_ft") );
-	};
-},
-
-//this.xFlightsGrid.getStore().on("load", function(store, recs, idx){
-//	this.get_map_panel().update_radar(recs);
-//}, this);
 
 register_flights_store: function(){
-	console.log("register_flights_store");
+	//console.log("register_flights_store");
 	if(!this.xFlightsStore){
 		this.xFlightsStore = Ext.StoreMgr.lookup("flights_store");
 		this.xFlightsStore.on("load", function(sto, recs){
-			console.log("xFlightsStore.UPDATED", recs);
+			//console.log("xFlightsStore.UPDATED", recs);
 			this.L.radarBlip.removeAllFeatures();
 			this.L.radarLbl.removeAllFeatures();
 			
@@ -308,7 +336,7 @@ register_flights_store: function(){
 			//this.xFlightsStore.each( function(rec){
 				var r = recs[i].raw
 				//console.log(r);
-				this.show_radar(r.callsign, r.lat, r.lon, r.hdg, r.altitude);
+				this.add_radar_blip(r.callsign, r.lat, r.lon, r.hdg, r.altitude);
 			};
 		}, this);
 	}
@@ -318,7 +346,7 @@ register_flights_store: function(){
 
 //==========================================================
 // Shows aircraft on the RADAR map, with callsign (two features, poor openlayer)
-show_radar: function show_radar(mcallsign, mlat, mlon, mheading, maltitude){
+add_radar_blip: function (mcallsign, mlat, mlon, mheading, maltitude){
 	//console.log("show_radar");
 	// remove xisting iamge/label if exist
 	/*
@@ -378,52 +406,28 @@ show_radar: function show_radar(mcallsign, mlat, mlon, mheading, maltitude){
 	
 },
 
-add_airport: function(apt){
-
-	//c//onsole.log(mcallsign, mlat, mlon, mheading, maltitude)
-	var pointImg = new OpenLayers.Geometry.Point(apt.lon, apt.lat
+add_airport: function(r){
+	var pointImg = new OpenLayers.Geometry.Point(r.lon, r.lat
 						).transform(this.get_display_projection(), this.get_map().getProjectionObject() );	
 
 	// Add Image
 	var imgFeat = new OpenLayers.Feature.Vector(pointImg, {
-				hdg: mheading
-				}); 
-	imgFeat._callsign = mcallsign;
-	//this.L.radarBlip.addFeatures([imgFeat]);	
-	//console.log(mcallsign, mlat, mlon, mheading, maltitude);
-	
-	var gxOff = 4;
-	var gyOff = -8;
+		code: r.code
+	}); 
 
-	var lxOff = 6;
-	var lyOff = 2;
-	
-	// move the label offset
-	if(mheading > 0  && mheading < 90){
-		lyOff = lyOff - 15;
-		gyOff = gyOff  + 15 ;
-	}else if( mheading > 90 && mheading < 150){
-		lyOff = lyOff + 5;
-		gyOff = gyOff - 5;
-	}else if( mheading > 270 && mheading < 360){
-		lyOff = lyOff - 10;
-		gyOff = gyOff  + 10;
-		
-	}
-
-	// Add callsign label as separate feature, to have a background color (graphic) with offset
-	var pointLabel = new OpenLayers.Geometry.Point(mlon, mlat
-					).transform(this.get_display_projection(),  this.get_map().getProjectionObject() );
-	var lblFeat = new OpenLayers.Feature.Vector(pointLabel, {
-                callsign: mcallsign,
-				lxOff: lxOff, lyOff: lyOff,
-				gxOff: gxOff, gyOff: gyOff
-				});
-	lblFeat._callsign = mcallsign;
-	this.L.radarLbl.addFeatures([lblFeat]);	
-	
+	this.L.airport.addFeatures([imgFeat]);	
 },
+add_vor: function(r){
+	var pointImg = new OpenLayers.Geometry.Point(r.lon, r.lat
+						).transform(this.get_display_projection(), this.get_map().getProjectionObject() );	
 
+	// Add Image
+	var imgFeat = new OpenLayers.Feature.Vector(pointImg, {
+		code: r.code
+	}); 
+
+	this.L.vor.addFeatures([imgFeat]);	
+},
 
 on_goto: function(butt){
 	//var lonLat = new OpenLayers.LonLat(butt.lon, butt.lat

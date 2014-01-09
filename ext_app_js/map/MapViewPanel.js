@@ -23,21 +23,25 @@ get_main_map: function(){
 		this.xMapPanel =  Ext.create("FGx.map.MapBasic", {
 			xConfig: this.xConfig, flex: 1, region: "center"
 		});
-		this.xMapPanel.get_map().events.register("moveend", this, this.on_map_moved );
+		//this.xMapPanel.get_map().events.register("moveend", this, this.on_map_moved );
 	}
 	
 	return this.xMapPanel;
 },
-
+/*
 on_map_moved: function(evt){
-	return;
-	console.log("moveend", evt);
 	
-	var extent = this.xMapPanel.get_map().getExtent()
-	console.log("extent", extent);
+	
+	var map = this.xMapPanel.get_map();
+	if ( this.xMapPanel.get_map().getZoom() < 7 ){
+		return;
+	}
+	var extent = map.getExtent()
+	console.log("extent", extent, map.getZoom());
+	
 	var ll = extent.transform( new OpenLayers.Projection("EPSG:3857"), new OpenLayers.Projection("EPSG:4326"));
-	console.log("ll", ll);
-	return;
+	//console.log("ll", ll);
+	//return;
 	Ext.Ajax.request({
 		url: NAV_SERVER + "/all.json?bbox=" + ll.left + "," + ll.bottom + "," + ll.right + "," + ll.top,
 		method: "GET",
@@ -45,8 +49,10 @@ on_map_moved: function(evt){
 		success: function(response, opts) {
 			var data = Ext.decode(response.responseText);
 			console.log(data);
+			var map = this.xMapPanel.get_map()
 			for( var a in data.rows) {
-				console.log(a)
+				console.log(data.rows[a]);
+				map.add_airport(data.rows[a]);
 			}
 			
 		},
@@ -56,7 +62,7 @@ on_map_moved: function(evt){
 		
 	})
 },
-
+*/
 //======================================================
 // Airports Grid
 get_airports_panel: function(){
