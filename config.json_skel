@@ -1,7 +1,9 @@
-{"servers": 
-	{
-	"navdata": "http://navdata.fgx.ch",
-	"static": "http://static.fgx.ch"
-	},
-"debug": false
+{
+	"app": {"host" : "localhost", "port": 7887},
+	"servers": 
+		{
+		"navdata": "http://navdata.fgx.ch",
+		"static": "http://static.fgx.ch"
+		},
+	"debug": false
 }

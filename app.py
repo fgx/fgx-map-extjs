@@ -181,7 +181,7 @@ if __name__ == "__main__":
 	DEBUG = conf['debug']
 	
 	bottle.debug(DEBUG)
-	bottle.run(host="localhost", port="7888", reloader=DEBUG, debug=DEBUG)
+	bottle.run(host=conf['app']['host'], port=conf['app']['port'], reloader=DEBUG, debug=DEBUG)
 
 	
 
