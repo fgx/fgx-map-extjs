@@ -3,7 +3,6 @@
 import os
 import json
 
-from string import Template
 
 import bottle
 from bottle import route
@@ -19,7 +18,7 @@ APP_ROOT = os.path.abspath(os.path.dirname(__file__))
 ## Location of servers are overriden from config.json
 STATIC_SERVER = "http://static.fgx.ch"
 NAVDATA_SERVER = "http://navdata.fgx.ch"
-
+MAPNIK_SERVER = "http://localhost:8000"
 
 #==================================================================
 class Context(object):

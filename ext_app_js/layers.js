@@ -9,7 +9,8 @@ function make_base_layer(label, layer){
 	if(label == "Landmass"){
 		return new OpenLayers.Layer.WMS(
 					"Landmass",
-					"http://mapnik.fgx.ch:81/tilecache.py?",
+					//"http://mapnik.fgx.ch:81/tilecache.py?",
+                    "http://localhost:8000?",
 					{layers: "osm_coastline" , isBaselayer: "True", format: "image/png"}, 
 					{visibility: false}
 		);
@@ -29,8 +30,9 @@ function make_wms_layer(label, layer){
 	}
 	return new OpenLayers.Layer.WMS(
 			label,
-			"http://mapnik.fgx.ch:81/tilecache.py?",
-			{layers: layer , transparent: "True" , format: "image/png"}, 
+			//"http://mapnik.fgx.ch:81/tilecache.py?",
+            "http://localhost:8000?",
+			{layers: layer , transparent: "True" , format: "image/png",  srs: 'EPSG:3857',}, 
 			{visibility: false}
 		);
 }
