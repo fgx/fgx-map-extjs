@@ -158,21 +158,21 @@ get_store: function(){
 		this.xStore = new Ext.data.JsonStore({
 			TODOidProperty: 'callsign',
 			fields: [ 	
-				{name: "nav_suffix", type: 'string'},
-				{name: "nav_ident", type: 'string'},
-				{name: "nav_name", type: 'string'},
-				{name: "nav_center_lat84", type: 'float'},
-				{name: "nav_center_lon84", type: 'float'},
+				{name: "ntype", type: 'string'},
+				{name: "ident", type: 'string'},
+				{name: "name", type: 'string'},
+				{name: "lat", type: 'float'},
+				{name: "lon", type: 'float'},
 				{name: "nav_freq_mhz", type: 'string'},
 				{name: "nav_freq_khz", type: 'string'}
 			],
 			proxy: {
 				type: "ajax",
-				url: '/ajax/navaids',
+				url: NAVDATA_SERVER + '/navaids.json',
 				method: "GET",
 				reader: {
 					type: "json",
-					root: 'navaids'
+					root: 'rows'
 				}
 			},
 			remoteSort: false,
@@ -204,7 +204,7 @@ get_fix_search_text: function(){
 				if(txt.length < 2){
 					return;
 				}
-				this.get_store().load({params: {search: txt, nav_suffix: "fix"}});
+				this.get_store().load({params: {search: txt, ntype: "fix"}});
 			}
 		}, this);
 	}
@@ -224,7 +224,7 @@ get_vor_search_text: function(){
 				if(txt.length < 2){
 					return;
 				}
-				this.get_store().load({params: {search: txt, nav_suffix: "vor"}});
+				this.get_store().load({params: {search: txt, ntype: "vor"}});
 			}
 		}, this);
 	}
@@ -244,7 +244,7 @@ get_ndb_search_text: function(){
 				if(txt.length < 2){
 					return;
 				}
-				this.get_store().load({params: {search: txt, nav_suffix: "ndb"}});
+				this.get_store().load({params: {search: txt, ntype: "ndb"}});
 			}
 		}, this);
 	}
@@ -265,7 +265,7 @@ get_all_search_text: function(){
 				if(txt.length < 2){
 					return;
 				}
-				this.get_store().load({params: {search: txt, nav_suffix: "__ALL__"}});
+				this.get_store().load({params: {search: txt, ntype: "__ALL__"}});
 			}
 		}, this);
 	}
