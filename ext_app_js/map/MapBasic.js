@@ -238,7 +238,7 @@ initComponent: function() {
 on_map_moved: function(evt){
 	
 	
-	console.log("zoom=", this.map.getZoom());
+	//console.log("zoom=", this.map.getZoom());
 	if ( this.map.getZoom() < 7 ){
 		return;
 	}
@@ -248,9 +248,9 @@ on_map_moved: function(evt){
 	var ll = this.map.getExtent().transform( new OpenLayers.Projection("EPSG:3857"), new OpenLayers.Projection("EPSG:4326"));
 	//console.log("ll", ll);
 	//return;
-	//console.log( NAV_SERVER + "/all.json?bbox=" + ll.toBBox())
+	//console.log( NAVDATA_SERVER + "/all.json?bbox=" + ll.toBBox())
 	Ext.Ajax.request({
-		url: NAV_SERVER + "/all.json?bbox=" + ll.left + "," + ll.bottom + "," + ll.right + "," + ll.top,
+		url: NAVDATA_SERVER + "/all.json?bbox=" + ll.left + "," + ll.bottom + "," + ll.right + "," + ll.top,
 		method: "GET",
 		scope: this,
 		success: function(response, opts) {

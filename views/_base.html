@@ -11,13 +11,14 @@
 
 	<script>
 
-	var DB_DATE_FORMAT = 'Y-m-d';
-	var DB_TIME_FORMAT = 'H:i:s';
-	var DB_DATE_TIME_FORMAT = 'Y-m-d H:i:s';
+	var API_DATE_FORMAT = 'Y-m-d';
+	var API_TIME_FORMAT = 'H:i:s';
+	var API_DATE_TIME_FORMAT = 'Y-m-d H:i:s';
 	
-	var NAV_SERVER = "{{c.navdata_server}}";
-	var CROSSFEED_URL = "{{c.crossfeed_url}}";
-	var STATIC_SERVER = "{{c.static_server}}";
+	var NAVDATA_SERVER = "{{c.servers.navdata}}";
+	var CROSSFEED_URL = "{{c.servers.crossfeed}}";
+	var STATIC_SERVER = "{{c.servers.static}}";
+	
 	</script>
 
 

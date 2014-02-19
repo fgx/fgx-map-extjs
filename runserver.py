@@ -1,5 +1,9 @@
 #!/usr/bin/python
 
+"""
+A quick knockup app to show a map
+"""
+
 import os
 import json
 
@@ -8,17 +12,15 @@ import bottle
 from bottle import route
 from bottle import TEMPLATE_PATH, jinja2_template as template
 
-DEBUG = False
-
 VERSION = "0.1"
 
+# Define some paths
 APP_ROOT = os.path.abspath(os.path.dirname(__file__))
+TEMP_DIR = APP_ROOT + "/temp"
 
+# CONF iguration is redefined/loaded from config.json below
+CONF = None
 
-## Location of servers are overriden from config.json
-STATIC_SERVER = "http://static.fgx.ch"
-NAVDATA_SERVER = "http://navdata.fgx.ch"
-MAPNIK_SERVER = "http://localhost:8000"
 
 #==================================================================
 class Context(object):
@@ -30,9 +32,7 @@ def new_context():
 	ob = Context()
 	ob.ver = VERSION
 	ob.ext_ver = "4.1.1a"
-	ob.navdata_server = NAVDATA_SERVER
-	ob.static_server = STATIC_SERVER
-	ob.crossfeed_url = "http://crossfeed.fgx.ch/flights.json"
+	ob.servers = CONF['servers']
 	return ob
 
 
@@ -155,7 +155,7 @@ def dynamic_style(ver):
 	s += "\n\n" # incase
 	
 	for k in sorted(static_icons.keys()):
-		s += ".%s{background-image: url('%s/icons/famfam_silk/%s') !important; background-repeat: no-repeat;}\n" %  (k, STATIC_SERVER, static_icons[k])
+		s += ".%s{background-image: url('%s/icons/famfam_silk/%s') !important; background-repeat: no-repeat;}\n" %  (k, CONF['servers']['static'], static_icons[k])
 	s += "\n\n" # incase
 	
 	bottle.response.content_type = 'text/css'
@@ -174,13 +174,12 @@ def index():
 if __name__ == "__main__":
 	
 	## Load configuration
-	conf = json.load(open(APP_ROOT + "/config.json", "r"))
-	STATIC_SERVER = conf['servers']['static']
-	NAVDATA_SERVER = conf['servers']['navdata']
-	DEBUG = conf['debug']
+	CONF = json.load(open(APP_ROOT + "/config.json", "r"))
+
+	DEBUG = CONF['debug']
 	
 	bottle.debug(DEBUG)
-	bottle.run(host=conf['app']['host'], port=conf['app']['port'], reloader=DEBUG, debug=DEBUG)
+	bottle.run(host=CONF['listen']['host'], port=CONF['listen']['port'], reloader=DEBUG, debug=DEBUG)
 
 	
 

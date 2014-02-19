@@ -43,7 +43,7 @@ on_map_moved: function(evt){
 	//console.log("ll", ll);
 	//return;
 	Ext.Ajax.request({
-		url: NAV_SERVER + "/all.json?bbox=" + ll.left + "," + ll.bottom + "," + ll.right + "," + ll.top,
+		url: NAVDATA_SERVER + "/all.json?bbox=" + ll.left + "," + ll.bottom + "," + ll.right + "," + ll.top,
 		method: "GET",
 		scope: this,
 		success: function(response, opts) {

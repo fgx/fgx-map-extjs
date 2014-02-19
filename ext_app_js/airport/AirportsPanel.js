@@ -80,7 +80,7 @@ get_airports_grid: function(){
 
 fetch_airport: function(apt_ident){
 	Ext.Ajax.request({
-		url: NAV_SERVER + "/airport/" + apt_ident + ".json",
+		url: NAVDATA_SERVER + "/airport/" + apt_ident + ".json",
 		method: "GET",
 		scope: this,
 		success: function(response, opts) {
@@ -291,7 +291,7 @@ get_airports_store: function(){
 			model: "mAirport",
 			proxy: {
 				type: "ajax",
-				url: NAV_SERVER + '/airports.json',
+				url: NAVDATA_SERVER + '/airports.json',
 				method: "GET",
 				reader: {
 					type: "json",

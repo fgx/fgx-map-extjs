@@ -19,7 +19,9 @@ function make_base_layer(label, layer){
 		L.setOpacity(0.4);
 		return L
 	}
-	return new OpenLayers.Layer.OSM.Mapnik( "OSM" );
+	var layy = new OpenLayers.Layer.OSM.Mapnik( "OSM" );
+    //console.log(layy);
+	return layy
 }
 
 //====================================================
@@ -32,7 +34,7 @@ function make_wms_layer(label, layer){
 			label,
 			//"http://mapnik.fgx.ch:81/tilecache.py?",
             "http://localhost:8000?",
-			{layers: layer , transparent: "True" , format: "image/png",  srs: 'EPSG:3857',}, 
+			{layers: layer , transparent: "True" , format: "image/png",  DEADsrs: 'EPSG:3857',}, 
 			{visibility: false}
 		);
 }
