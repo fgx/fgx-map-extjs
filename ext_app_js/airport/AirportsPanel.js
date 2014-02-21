@@ -55,10 +55,10 @@ get_airports_grid: function(){
 				this.action_new_tab()
 			],
 			columns: [ 
-				{header: 'Airport', dataIndex:'code', 
+				{header: 'Airport', dataIndex:'ident', 
 					sortable: true, flex: 1, menuDisabled: true,
 					renderer: function(v, meta, rec){
-						return rec.get("code") + ": " + rec.get("name");
+						return rec.get("ident") + ": " + rec.get("name");
 					}
 				}
 			]
@@ -91,7 +91,7 @@ fetch_airport: function(apt_ident){
 			//sto.removeAll();
 			
 			var root = Ext.create("mTree", {
-				x_key: data.airport.apt_ident, x_val: data.airport.apt_name_ascii,
+				x_key: data.airport.ident, x_val: data.airport.name,
 				expanded: false,  expandable: true
 			});
 			sto.setRootNode(root);
@@ -203,7 +203,7 @@ initComponent: function() {
 								var s = txtFld.getValue();
 								if(s.length > 1){
 									this.get_airports_store().load({params: {
-										code: s,
+										ident: s,
 										//apt_type: this.get_apt_types(),
 										//apt_size: this.get_apt_sizes()
 									}});
@@ -214,7 +214,7 @@ initComponent: function() {
 				]
 			},
 			{xtype: 'buttongroup', 
-				title: 'Find Name',
+				title: 'Search',
 				columns: 2,
 				items: [
 					{iconCls: "icoClr",	scope: this, tooltip: "Clear text box",
@@ -233,7 +233,7 @@ initComponent: function() {
 								if(txtFld.getValue().length > 3){
 									var s = txtFld.getValue().trim();
 									if(s.length > 3){
-										this.get_airports_store().load({params: {apt_name_ascii: 1}});
+										this.get_airports_store().load({params: {search: s}});
 									}
 								}
 							}

@@ -9,7 +9,7 @@ import json
 
 
 import bottle
-from bottle import route
+from bottle import route, static_file
 from bottle import TEMPLATE_PATH, jinja2_template as template
 
 VERSION = "0.1"
@@ -38,6 +38,11 @@ def new_context():
 
 
 #==================================================================
+
+@route('/:file#(favicon.ico|humans.txt)#')
+def favicon(file):
+    return static_file(file, root='static')
+
 
 @route("/fgx_ext/<ver>/<filename:path>", method="GET")
 def static_ext_app(ver, filename):

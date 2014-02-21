@@ -65,9 +65,9 @@ Ext.define('mAirport', {
 	idProperty: 'apt_ident',
 	fields: [ 	
 		{name: "apt_pk", type: 'string'},
-		{name: "code", type: 'string'},
+		{name: "ident", type: 'string'},
 		{name: "name", type: 'string'},
-		{name: "apt_size", type: 'string'},
+		{name: "elev_ft", type: 'string'},
 		{name: "lat", type: 'string'},
 		{name: "lon", type: 'string'},
 		{name: "apt_authority", type: 'string'}

@@ -136,7 +136,7 @@ initComponent: function() {
                 title: 'Map Overlays',
                 columns: 5,
                 items: [
-                    {xtype: "splitbutton", tooltip: "Airport", pressed: false, enableToggle: true,  iconCls: "icoAirport", ntype: "apt", 
+                    {xtype: "splitbutton", tooltip: "Airport", pressed: true, enableToggle: true,  iconCls: "icoAirport", ntype: "apt", 
                         toggleHandler: this.on_map_overlay_toggled, scope: this,
                         menu: {
                             items: [
@@ -145,7 +145,7 @@ initComponent: function() {
                         }
                     },
            
-                    {xtype: "splitbutton", tooltip: "VOR", pressed: false, enableToggle: true,  iconCls: "icoVor", ntype: "vor", 
+                    {xtype: "splitbutton", tooltip: "VOR", pressed: true, enableToggle: true,  iconCls: "icoVor", ntype: "vor", 
                         toggleHandler: this.on_map_overlay_toggled, scope: this,
                         menu: {
                             items: [
