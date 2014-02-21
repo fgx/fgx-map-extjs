@@ -231,13 +231,13 @@ get_layers: function(){
 					
 					
 					fontColor: "black",
-					fontSize: "10pt",
+					fontSize: "9pt",
 					fontFamily: "sans-serif",
 					fontWeight: "bold",
 					labelAlign: "left",
 					labelXOffset: 10, 
 					//labelYOffset: "${lyOff}", 
-					label : "${code}"
+					label : "${ident}"
 					//rotation : "${planerotation}",
 
 				},
@@ -251,6 +251,48 @@ get_layers: function(){
 			})
 		}
 	);
+    this.L.airport_name =  new OpenLayers.Layer.Vector(
+        "Airport Name", 
+        {
+            styleMap:  new OpenLayers.StyleMap({
+                "default": {
+                    fill: true,
+                    fillOpacity: 1,
+                    fillColor: "black",
+                    strokeColor: "green",
+                    strokeWidth: 1,
+
+                    //graphic: false,
+                   /*  externalGraphic: "/images/apt.png",
+                    graphicWidth: 14,
+                    graphicHeight: 14,
+                    graphicOpacity: 1.0,
+                    graphicXOffset: -7,
+                    graphicYOffset: -7,
+                    */
+                    
+                    fontColor: "black",
+                    fontSize: "8pt",
+                    fontFamily: "sans-serif",
+                    fontWeight: "normal",
+                    labelAlign: "left",
+                    labelXOffset: 10, 
+                    labelYOffset: -10, 
+                    label : "${name}"
+                    //rotation : "${planerotation}",
+
+                },
+                "select": {
+                    fillColor: "black",
+                    strokeColor: "yellow",
+                    pointRadius: 12,
+                    fillOpacity: 1
+                }
+
+            })
+        }
+    );
+        
 	this.L.vor =  new OpenLayers.Layer.Vector(
 		"Airport Label", 
 		{
@@ -410,7 +452,8 @@ get_layers: function(){
 		//this.L.blip,
 		//this.L.track,
 		this.L.radarLbl, this.L.radarBlip,
-		this.L.airport, this.L.vor
+		this.L.airport,this.L.airport_name,  
+        this.L.vor
 		//this.L.awyLbl, this.L.awyLine, 
 		//this.L.fpLbl, this.L.fpLine
 		

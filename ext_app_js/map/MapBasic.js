@@ -246,10 +246,11 @@ on_map_moved: function(evt){
 	//var extent = this.map.getExtent()
 	//console.log("extent", extent, map.getZoom());
 	
-	var ll = this.map.getExtent().transform( new OpenLayers.Projection("EPSG:3857"), new OpenLayers.Projection("EPSG:4326"));
+	//var ll = this.map.getExtent().transform( new OpenLayers.Projection("EPSG:3857"), new OpenLayers.Projection("EPSG:4326"));
+    var ll = this.map.getExtent().transform( this.map.getProjection(), new OpenLayers.Projection("EPSG:4326"));
 	//console.log("ll", ll);
 	//return;
-	console.log( NAVDATA_SERVER + "/all.json?bbox=" + ll.toBBOX())
+	//console.log( NAVDATA_SERVER + "/all.json?bbox=" + ll.toBBOX())
     //NAVDATA_SERVER + "/all.json?bbox=" + ll.left + "," + ll.bottom + "," + ll.right + "," + ll.top
 	Ext.Ajax.request({
 		url: NAVDATA_SERVER + "/all.json?bbox=" + ll.toBBOX(),
@@ -412,13 +413,20 @@ add_radar_blip: function (mcallsign, mlat, mlon, mheading, maltitude){
 add_airport: function(r){
 	var pointImg = new OpenLayers.Geometry.Point(r.lon, r.lat
 						).transform(this.get_display_projection(), this.get_map().getProjectionObject() );	
-
+    // Add Name
+    var nameFeat = new OpenLayers.Feature.Vector(pointImg, {
+        name: r.name
+    });
+    this.L.airport_name.addFeatures([nameFeat]);
+    
 	// Add Image
 	var imgFeat = new OpenLayers.Feature.Vector(pointImg, {
-		code: r.code
-	}); 
-
+		ident: r.ident
+	});
 	this.L.airport.addFeatures([imgFeat]);	
+    
+
+    
 },
 add_vor: function(r){
 	var pointImg = new OpenLayers.Geometry.Point(r.lon, r.lat
