@@ -174,7 +174,7 @@ initComponent: function() {
 						frame: false,
 						border: false,
 						flex: 2,
-						activeTab: 0,
+						activeTab: 1,
 						items: [
 							this.get_flights_grid(),
 							this.get_airports_panel(),

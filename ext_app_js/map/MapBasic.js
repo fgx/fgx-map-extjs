@@ -82,35 +82,36 @@ initComponent: function() {
 			},
 			
 			{xtype: 'buttongroup',
-				title: 'Navigation Aids',
-				columns: 5,
+				title: 'Map Layers',
+				columns: 5, disabled: true,
 				items: [
-					{xtype: "splitbutton", text: "VOR", pressed: false, enableToggle: true,  iconCls: "icoVor", navaid: "VOR", 
-						toggleHandler: this.on_nav_toggled, scope: this,
+					{xtype: "splitbutton", tooltip: "VOR", pressed: false, enableToggle: true,  iconCls: "icoVor", navaid: "VOR", 
+						toggleHandler: this.on_map_layer_toggled, scope: this,
 						menu: {
 							items: [
 								{text: "Show range - TODO", checked: false, disabled: true}
 							]
 						}
 					},
-					{xtype: "splitbutton", text: "DME", enableToggle: true,  iconCls: "icoDme", navaid: "DME", 
-						toggleHandler: this.on_nav_toggled,  scope: this,
+					{xtype: "splitbutton", tooltip: "DME", enableToggle: true,  iconCls: "icoDme", navaid: "DME", 
+						toggleHandler: this.on_map_layer_toggled,  scope: this,
 						menu: {
 							items: [
 								{text: "Show range - TODO", checked: false, disabled: true}
 							]
 						}
 					},
-					{text: "NDB&nbsp;", enableToggle: true, iconCls: "icoNdb", navaid: "NDB", 
-						toggleHandler: this.on_nav_toggled, scope: this
+					{tooltip: "NDB&nbsp;", enableToggle: true, iconCls: "icoNdb", navaid: "NDB", 
+						toggleHandler: this.on_map_layer_toggled, scope: this,
+						menu: {
+                            items: [
+                                {text: "Show range - TODO", checked: false, disabled: true}
+                            ]
+                        }
 					},
-					{text: "Fix&nbsp;&nbsp;&nbsp;", enableToggle: true, iconCls: "icoFix", navaid: "FIX", 
-						toggleHandler: this.on_nav_toggled, scope: this
+					{tooltip: "Fix&nbsp;&nbsp;&nbsp;", enableToggle: true, iconCls: "icoFix", navaid: "FIX", 
+						toggleHandler: this.on_map_layer_toggled, scope: this
 					}
-					//{text: "VORTAC", enableToggle: true, iconCls: "icoOff", navaid: "NDB", 
-					//	toggleHandler: this.on_nav_toggled, scope: this,
-					//	hidden: true, id: "fgx-vortac"
-					//}
 				]   
 			},
 			{xtype: 'buttongroup', disabled: false,
@@ -248,9 +249,10 @@ on_map_moved: function(evt){
 	var ll = this.map.getExtent().transform( new OpenLayers.Projection("EPSG:3857"), new OpenLayers.Projection("EPSG:4326"));
 	//console.log("ll", ll);
 	//return;
-	//console.log( NAVDATA_SERVER + "/all.json?bbox=" + ll.toBBox())
+	console.log( NAVDATA_SERVER + "/all.json?bbox=" + ll.toBBOX())
+    //NAVDATA_SERVER + "/all.json?bbox=" + ll.left + "," + ll.bottom + "," + ll.right + "," + ll.top
 	Ext.Ajax.request({
-		url: NAVDATA_SERVER + "/all.json?bbox=" + ll.left + "," + ll.bottom + "," + ll.right + "," + ll.top,
+		url: NAVDATA_SERVER + "/all.json?bbox=" + ll.toBBOX(),
 		method: "GET",
 		scope: this,
 		success: function(response, opts) {
@@ -288,7 +290,7 @@ on_base_layer: function(butt, checked){
 	bbButton.setText(butt.text);
 },
 
-on_nav_toggled: function(butt, checked){
+on_map_layer_toggled: function(butt, checked){
 	//butt.setIconCls( checked ? "icoOn" : "icoOff" );
 	this.map.getLayersByName(butt.navaid)[0].setVisibility(checked);
 },
@@ -424,7 +426,7 @@ add_vor: function(r){
 
 	// Add Image
 	var imgFeat = new OpenLayers.Feature.Vector(pointImg, {
-		code: r.code
+		ident: r.ident
 	}); 
 
 	this.L.vor.addFeatures([imgFeat]);	

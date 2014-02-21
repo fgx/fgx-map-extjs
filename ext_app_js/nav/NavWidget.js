@@ -41,15 +41,16 @@ initComponent: function() {
 					//return "<img src='/images/vfr_fix.png'>";
 				}
 			},
-			{header: 'Ident', dataIndex:'nav_ident', sortable: true, align: 'left', 
+			{header: 'Ident', dataIndex:'ident', sortable: true, align: 'left', 
 				hidden: false, width: 70, menuDisabled: true,
 				renderer: function(v, meta, rec){
 					// @TODO Make this a css class
 					return "<b>" + v + "</b>";
 				}
 			},
-			{header: 'Name', dataIndex:'nav_name', menuDisabled: true,
+			{header: 'Name', dataIndex:'name', menuDisabled: true,
 				sortable: true, align: 'left', hidden: false, flex: 1},
+           
 			{header: 'Freq', dataIndex:'nav_freq', menuDisabled: true,
 				sortable: true, align: 'left', hidden: false, flex: 1,
 				renderer: function(v, meta, rec){
@@ -64,8 +65,8 @@ initComponent: function() {
 					}
 				}
 			},
-			{header: 'Lat', dataIndex:'nav_center_lat84', sortable: true, align: 'left', hidden: false, flex: 1},
-			{header: 'Lon', dataIndex:'nav_center_lon84', sortable: true, align: 'left', hidden: false, flex: 1}
+			{header: 'Lat', dataIndex:'lat', sortable: true, align: 'left', hidden: false, flex: 1},
+			{header: 'Lon', dataIndex:'lon', sortable: true, align: 'left', hidden: false, flex: 1}
 		],
 		
 		/* Top Toolbar */
@@ -163,6 +164,8 @@ get_store: function(){
 				{name: "name", type: 'string'},
 				{name: "lat", type: 'float'},
 				{name: "lon", type: 'float'},
+                {name: "elev_m", type: 'integer'},
+                {name: "elev_ft", type: 'integer'},
 				{name: "nav_freq_mhz", type: 'string'},
 				{name: "nav_freq_khz", type: 'string'}
 			],

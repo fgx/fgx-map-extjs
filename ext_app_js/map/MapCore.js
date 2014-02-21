@@ -278,7 +278,7 @@ get_layers: function(){
 					labelAlign: "left",
 					labelXOffset: 10, 
 					//labelYOffset: "${lyOff}", 
-					label : "${code}"
+					label : "${ident}"
 					//rotation : "${planerotation}",
 
 				},

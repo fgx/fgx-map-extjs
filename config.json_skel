@@ -1,9 +1,12 @@
 {
-	"app": {"host" : "localhost", "port": 7888},
-	"servers": 
-		{
-		"navdata": "http://navdata.fgx.ch",
-		"static": "http://static.fgx.ch"
-		},
+	"listen": {
+        "host" : "localhost", 
+        "port": 7888
+    },
+    "servers": {
+        "navdata": "http://localhost:7889",
+        "static": "http://localhost:81/fgx-static",
+        "mapnik": "http://localhost:8000?"
+    },
 	"debug": false
 }
