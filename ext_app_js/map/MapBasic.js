@@ -132,6 +132,49 @@ initComponent: function() {
 					//{text: "Heliports", enableToggle: true, iconCls: "icoOff", apt: "heliports", toggleHandler: this.on_apt_toggled},
 				]   
 			},
+            {xtype: 'buttongroup',
+                title: 'Map Overlays',
+                columns: 5,
+                items: [
+                    {xtype: "splitbutton", tooltip: "Airport", pressed: false, enableToggle: true,  iconCls: "icoAirport", ntype: "apt", 
+                        toggleHandler: this.on_map_overlay_toggled, scope: this,
+                        menu: {
+                            items: [
+                                {text: "Show Name", checked: false, disabled: false}
+                            ]
+                        }
+                    },
+           
+                    {xtype: "splitbutton", tooltip: "VOR", pressed: false, enableToggle: true,  iconCls: "icoVor", ntype: "vor", 
+                        toggleHandler: this.on_map_overlay_toggled, scope: this,
+                        menu: {
+                            items: [
+                                {text: "Show range - TODO", checked: false, disabled: true}
+                            ]
+                        }
+                    },
+                    {xtype: "splitbutton", tooltip: "DME", enableToggle: true,  iconCls: "icoDme", ntype: "dme", 
+                        toggleHandler: this.on_map_overlay_toggled,  scope: this,
+                        menu: {
+                            items: [
+                                {text: "Show range - TODO", checked: false, disabled: true}
+                            ]
+                        }
+                    },
+                    {tooltip: "NDB&nbsp;", enableToggle: true, iconCls: "icoNdb", ntype: "ndb", 
+                        toggleHandler: this.on_map_overlay_toggled, scope: this,
+                        menu: {
+                            items: [
+                                {text: "Show range - TODO", checked: false, disabled: true}
+                            ]
+                        }
+                    },
+                    {tooltip: "Fix&nbsp;&nbsp;&nbsp;", enableToggle: true, iconCls: "icoFix", ntype: "fix", 
+                        toggleHandler: this.on_map_overlay_toggled, scope: this
+                    }
+                ]   
+            },
+           
 			/*{xtype: 'buttongroup', 
 				title: 'Utils', 
 				columns: 2,
@@ -270,7 +313,16 @@ on_map_moved: function(evt){
 					
 				}else if(rr.ntype == "vor"){
 					this.add_vor(rr);
-				}
+                    
+				}else if(rr.ntype == "dme"){
+                    this.add_dme(rr);
+                    
+                }else if(rr.ntype == "ndb"){
+                    this.add_ndb(rr);
+                    
+                }else if(rr.ntype == "fix"){
+                   // this.add_fix(rr);
+                }
 			}
 			
 		},
@@ -295,7 +347,11 @@ on_map_layer_toggled: function(butt, checked){
 	//butt.setIconCls( checked ? "icoOn" : "icoOff" );
 	this.map.getLayersByName(butt.navaid)[0].setVisibility(checked);
 },
-
+on_map_overlay_toggled: function(butt, checked){
+    console.log("yes");
+    //butt.setIconCls( checked ? "icoOn" : "icoOff" );
+    //this.map.getLayersByName(butt.navaid)[0].setVisibility(checked);
+},
 on_apt_toggled: function(butt, checked){
  	//butt.setIconCls( checked ? "icoOn" : "icoOff" );
 	// TODO : this back when gral is ready
@@ -431,15 +487,36 @@ add_airport: function(r){
 add_vor: function(r){
 	var pointImg = new OpenLayers.Geometry.Point(r.lon, r.lat
 						).transform(this.get_display_projection(), this.get_map().getProjectionObject() );	
-
-	// Add Image
-	var imgFeat = new OpenLayers.Feature.Vector(pointImg, {
+	var feat = new OpenLayers.Feature.Vector(pointImg, {
 		ident: r.ident
 	}); 
-
-	this.L.vor.addFeatures([imgFeat]);	
+	this.L.vor.addFeatures([feat]);	
 },
-
+add_dme: function(r){
+    var pointImg = new OpenLayers.Geometry.Point(r.lon, r.lat
+                        ).transform(this.get_display_projection(), this.get_map().getProjectionObject() );  
+    var feat = new OpenLayers.Feature.Vector(pointImg, {
+        ident: r.ident
+    }); 
+    this.L.dme.addFeatures([feat]); 
+},
+add_ndb: function(r){
+    var pointImg = new OpenLayers.Geometry.Point(r.lon, r.lat
+                        ).transform(this.get_display_projection(), this.get_map().getProjectionObject() );  
+    var feat = new OpenLayers.Feature.Vector(pointImg, {
+        ident: r.ident
+    }); 
+    this.L.ndb.addFeatures([feat]); 
+},
+add_fix: function(r){
+    var pointImg = new OpenLayers.Geometry.Point(r.lon, r.lat
+                        ).transform(this.get_display_projection(), this.get_map().getProjectionObject() );  
+    var feat = new OpenLayers.Feature.Vector(pointImg, {
+        ident: r.ident
+    }); 
+    this.L.fix.addFeatures([feat]); 
+},
+//=======================================
 on_goto: function(butt){
 	//var lonLat = new OpenLayers.LonLat(butt.lon, butt.lat
 	//		).transform(this.get_display_projection(),  this.get_map().getProjectionObject() );

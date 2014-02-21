@@ -294,7 +294,7 @@ get_layers: function(){
     );
         
 	this.L.vor =  new OpenLayers.Layer.Vector(
-		"Airport Label", 
+		"VOR", 
 		{
 			styleMap:  new OpenLayers.StyleMap({
 				"default": {
@@ -334,6 +334,130 @@ get_layers: function(){
 			})
 		}
 	);
+    this.L.dme =  new OpenLayers.Layer.Vector(
+        "DME", 
+        {
+            styleMap:  new OpenLayers.StyleMap({
+                "default": {
+                    fill: true,
+                    fillOpacity: 1,
+                    fillColor: "black",
+                    strokeColor: "green",
+                    strokeWidth: 1,
+
+                    //graphic: false,
+                    externalGraphic: "/images/vor.png",
+                    graphicWidth: 14,
+                    graphicHeight: 14,
+                    graphicOpacity: 1.0,
+                    graphicXOffset: -7,
+                    graphicYOffset: -7,
+                    
+                    
+                    fontColor: "green",
+                    fontSize: "10pt",
+                    fontFamily: "sans-serif",
+                    fontWeight: "bold",
+                    labelAlign: "left",
+                    labelXOffset: 10, 
+                    //labelYOffset: "${lyOff}", 
+                    label : "${ident}"
+                    //rotation : "${planerotation}",
+
+                },
+                "select": {
+                    fillColor: "black",
+                    strokeColor: "yellow",
+                    pointRadius: 12,
+                    fillOpacity: 1
+                }
+
+            })
+        }
+    );
+        
+    this.L.ndb =  new OpenLayers.Layer.Vector(
+        "NDB", 
+        {
+            styleMap:  new OpenLayers.StyleMap({
+                "default": {
+                    fill: true,
+                    fillOpacity: 1,
+                    fillColor: "black",
+                    strokeColor: "green",
+                    strokeWidth: 1,
+
+                    //graphic: false,
+                    externalGraphic: "/images/ndb.png",
+                    graphicWidth: 14,
+                    graphicHeight: 14,
+                    graphicOpacity: 1.0,
+                    graphicXOffset: -7,
+                    graphicYOffset: -7,
+                    
+                    
+                    fontColor: "green",
+                    fontSize: "10pt",
+                    fontFamily: "sans-serif",
+                    fontWeight: "bold",
+                    labelAlign: "left",
+                    labelXOffset: 10, 
+                    //labelYOffset: "${lyOff}", 
+                    label : "${ident}"
+                    //rotation : "${planerotation}",
+
+                },
+                "select": {
+                    fillColor: "black",
+                    strokeColor: "yellow",
+                    pointRadius: 12,
+                    fillOpacity: 1
+                }
+
+            })
+        }
+    );
+    this.L.fix =  new OpenLayers.Layer.Vector(
+        "Fix", 
+        {
+            styleMap:  new OpenLayers.StyleMap({
+                "default": {
+                    fill: true,
+                    fillOpacity: 1,
+                    fillColor: "black",
+                    strokeColor: "green",
+                    strokeWidth: 1,
+
+                    //graphic: false,
+                    externalGraphic: "/images/fix.png",
+                    graphicWidth: 14,
+                    graphicHeight: 14,
+                    graphicOpacity: 1.0,
+                    graphicXOffset: -7,
+                    graphicYOffset: -7,
+                    
+                    
+                    fontColor: "green",
+                    fontSize: "10pt",
+                    fontFamily: "sans-serif",
+                    fontWeight: "bold",
+                    labelAlign: "left",
+                    labelXOffset: 10, 
+                    //labelYOffset: "${lyOff}", 
+                    label : "${ident}"
+                    //rotation : "${planerotation}",
+
+                },
+                "select": {
+                    fillColor: "black",
+                    strokeColor: "yellow",
+                    pointRadius: 12,
+                    fillOpacity: 1
+                }
+
+            })
+        }
+    ); 
 	var LAYERS = [
 		//=================================================
 		// Overlay
@@ -453,7 +577,7 @@ get_layers: function(){
 		//this.L.track,
 		this.L.radarLbl, this.L.radarBlip,
 		this.L.airport,this.L.airport_name,  
-        this.L.vor
+        this.L.vor, this.L.dme, this.L.ndb,  this.L.fix
 		//this.L.awyLbl, this.L.awyLine, 
 		//this.L.fpLbl, this.L.fpLine
 		
