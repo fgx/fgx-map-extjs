@@ -70,7 +70,7 @@ get_airports_grid: function(){
 				return;
 			}
 			this.action_new_tab().setDisabled(false);			
-			this.fetch_airport( selected[0].get("code") );
+			this.fetch_airport( selected[0].get("ident") );
 			this.fireEvent("AIRPORT", selected[0].getData() );
 		}, this);
 	}
@@ -92,18 +92,20 @@ fetch_airport: function(apt_ident){
 			
 			var root = Ext.create("mTree", {
 				x_key: data.airport.ident, x_val: data.airport.name,
-				expanded: false,  expandable: true
+				expanded: true,  expandable: true
 			});
 			sto.setRootNode(root);
+            console.log(data);
 			var runs = data.runways;
 			for(var ir = 0; ir < runs.length; ir++){
 				var r = runs[ir];
 				var rwyNode = Ext.create("mTree", {
-						x_key: r.rwy, x_val: r.rwy_length,
-						expanded: true,  expandable: true
+						x_key: r.rwy, x_val: r.length_m,
+						expanded: false,  expandable: true
 				});
 				root.appendChild(rwyNode);
 				
+                /*
 				for(var it = 0; it < r.thresholds.length; it++){
 					var t = r.thresholds[it];
 					var tn =  Ext.create("mTree", {
@@ -122,7 +124,7 @@ fetch_airport: function(apt_ident){
 						});
 						tn.appendChild(pn);
 					}
-				}					
+				}*/					
 			}
 			if(root.hasChildNodes()){
 				root.expand();
