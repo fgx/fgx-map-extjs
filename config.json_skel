@@ -6,7 +6,8 @@
     "servers": {
         "navdata": "http://localhost:7889",
         "static": "http://localhost:81/fgx-static",
-        "mapnik": "http://localhost:8000?"
+        "mapnik": "http://localhost:8000?",
+        "crossfeed": "http://crossfeed.fgx.ch/flights.json"
     },
 	"debug": false
 }

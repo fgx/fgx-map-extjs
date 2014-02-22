@@ -186,10 +186,19 @@ on_layers_browser_widget: function(butt, checked){
 // Map Panels
 //=================================================================================
 open_map:  function(obj){
-	//console.log(">> MainViewort.open_map", obj.title, obj.iconCls, obj.lat, obj.lon, obj.zoom, obj.closable);
-	var newMap = Ext.create("FGx.map.MapViewPanel", {xConfig: obj, title: obj.title, iconCls: obj.iconCls});
-	this.get_tab_panel().add(newMap);
-	this.get_tab_panel().setActiveTab(newMap);
+	//console.log(">> MainViewort.open_map", obj.title, obj.iconCls, obj.lat, obj.lon, obj.zoom, obj.closable);    
+    
+    if(obj.apt_ident){
+        var aptMap = Ext.create("FGx.airport.AirportMapPanel", {xConfig: obj, title: obj.apt_ident, iconCls: obj.iconCls, apt_ident: obj.apt_ident, closable: true});   
+        this.get_tab_panel().add(aptMap);
+        this.get_tab_panel().setActiveTab(aptMap);
+        return
+    }
+    var newMap = Ext.create("FGx.map.MapViewPanel", {xConfig: obj, title: obj.title, iconCls: obj.iconCls});   
+    this.get_tab_panel().add(newMap);
+    this.get_tab_panel().setActiveTab(newMap);
+
+    
 },
 
 on_goto: function(butt){
@@ -415,7 +424,11 @@ initComponent: function(){
 initialize:  function(){
 	//return;
 	//= Add default main map
-	this.open_map({title: "Main Map", closable:false})
+	this.open_map({title: "Main Map", closable:false});
+	
+	this.open_map({title: "EGLL", closable:true, apt_ident: "EGLL"});
+    this.open_map({title: "EHAM", closable:true, apt_ident: "EHAM"});
+    this.open_map({title: "KSFO", closable:true, apt_ident: "KSFO"});
 	//return;
 	//= Start MP Refresh 
 	if(this.refresh_rate > 0){
@@ -423,6 +436,7 @@ initialize:  function(){
 		//console.log(butts);
 		//this.runner.start( { run: this.update_flights, interval: this.refresh_rate * 1000 });
 	}
+	 this.get_tab_panel().setActiveTab(0);
 	//this.on_flight_plans_widget();
 	//this.on_layers_browser_widget();
 },

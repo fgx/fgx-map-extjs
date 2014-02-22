@@ -249,7 +249,7 @@ initComponent: function() {
 	//this.map.addLayer( make_base_layer("Light") );
 	//this.set_base_layer("Light");
 	
-	//== Add the layers here
+	//== Add the Mapnik layers here
 	var xLayers = ['VOR','DME','NDB','FIX', "Airport", "Seaport", "Heliport"];
 	for(var i = 0; i< xLayers.length; i++){
 		this.map.addLayer( make_wms_layer(xLayers[i]) );
@@ -281,7 +281,7 @@ initComponent: function() {
 
 on_map_moved: function(evt){
 	
-	
+	//return;
 	//console.log("zoom=", this.map.getZoom());
 	if ( this.map.getZoom() < 7 ){
 		return;
@@ -309,7 +309,7 @@ on_map_moved: function(evt){
 				//console.log(data.rows[a]);
 				var rr = data.rows[a];
 				if(rr.ntype == "apt"){
-					this.add_airport(rr);
+					//this.add_airport(rr);
 					
 				}else if(rr.ntype == "vor"){
 					this.add_vor(rr);
@@ -484,6 +484,11 @@ add_airport: function(r){
 
     
 },
+
+
+
+
+
 add_vor: function(r){
 	var pointImg = new OpenLayers.Geometry.Point(r.lon, r.lat
 						).transform(this.get_display_projection(), this.get_map().getProjectionObject() );	
@@ -516,6 +521,44 @@ add_fix: function(r){
     }); 
     this.L.fix.addFeatures([feat]); 
 },
+
+add_sid: function(ident, waypoints){
+    var points = [];
+    for(var i =0; i < waypoints.length; i++){
+        points.push( 
+            new OpenLayers.Geometry.Point(waypoints[i].longitude, waypoints[i].latitude ).transform(
+               this.get_display_projection(), this.get_map().getProjectionObject())
+        ); 
+    }
+    //console.log("points=", points);
+    var feature = new OpenLayers.Feature.Vector(
+        new OpenLayers.Geometry.LineString(points)
+    );
+    this.L.sids.addFeatures(feature);
+},
+add_star: function(ident, waypoints){
+    var points = [];
+    for(var i =0; i < waypoints.length; i++){
+        points.push( 
+            new OpenLayers.Geometry.Point(waypoints[i].longitude, waypoints[i].latitude ).transform(
+               this.get_display_projection(), this.get_map().getProjectionObject())
+        ); 
+    }
+    //console.log("points=", points);
+    var feature = new OpenLayers.Feature.Vector(
+        new OpenLayers.Geometry.LineString(points)
+    );
+    this.L.stars.addFeatures(feature);
+},
+
+
+
+
+
+
+
+
+
 //=======================================
 on_goto: function(butt){
 	//var lonLat = new OpenLayers.LonLat(butt.lon, butt.lat

@@ -457,7 +457,71 @@ get_layers: function(){
 
             })
         }
-    ); 
+    );
+    this.L.sids =  new OpenLayers.Layer.Vector("SIDS",
+        {
+            styleMap:  new OpenLayers.StyleMap({
+                "default": {
+                    fill: true,
+                    fillOpacity: 1,
+                    fillColor: "black",
+                    strokeColor: "blue",
+                    strokeWidth: 2,
+                    
+                    
+                    fontColor: "green",
+                    fontSize: "10pt",
+                    fontFamily: "sans-serif",
+                    fontWeight: "bold",
+                    labelAlign: "left",
+                    labelXOffset: 10, 
+                    //labelYOffset: "${lyOff}", 
+                    //label : "${ident}"
+                    //rotation : "${planerotation}",
+
+                },
+                "select": {
+                    fillColor: "black",
+                    strokeColor: "yellow",
+                    pointRadius: 12,
+                    fillOpacity: 1
+                }
+
+            })
+        }
+    );
+    this.L.stars =  new OpenLayers.Layer.Vector("STARS",
+        {
+            styleMap:  new OpenLayers.StyleMap({
+                "default": {
+                    fill: true,
+                    fillOpacity: 1,
+                    fillColor: "black",
+                    strokeColor: "red",
+                    strokeWidth: 2,
+                    
+                    
+                    fontColor: "green",
+                    fontSize: "10pt",
+                    fontFamily: "sans-serif",
+                    fontWeight: "bold",
+                    labelAlign: "left",
+                    labelXOffset: 10, 
+                    //labelYOffset: "${lyOff}", 
+                    //label : "${ident}"
+                    //rotation : "${planerotation}",
+
+                },
+                "select": {
+                    fillColor: "black",
+                    strokeColor: "yellow",
+                    pointRadius: 12,
+                    fillOpacity: 1
+                }
+
+            })
+        }
+    );
 	var LAYERS = [
 		//=================================================
 		// Overlay
@@ -577,7 +641,8 @@ get_layers: function(){
 		//this.L.track,
 		this.L.radarLbl, this.L.radarBlip,
 		this.L.airport,this.L.airport_name,  
-        this.L.vor, this.L.dme, this.L.ndb,  this.L.fix
+        this.L.vor, this.L.dme, this.L.ndb,  this.L.fix,
+        this.L.sids, this.L.stars
 		//this.L.awyLbl, this.L.awyLine, 
 		//this.L.fpLbl, this.L.fpLine
 		
@@ -629,8 +694,16 @@ set_base_layer: function(layer_name){
 	this.map.setBaseLayer( layer );
 },
 
-
-pan_to: function(obj){
+set_center: function(obj, zoom){
+    var lonLat = new OpenLayers.LonLat(obj.lon, obj.lat
+            ).transform(this.get_display_projection(),  this.get_map().getProjectionObject() );
+    this.map.setCenter(lonLat);
+    if(zoom){
+        this.map.zoomTo(zoom);
+    }
+    
+},
+DEADpan_to: function(obj, zoom){
 	var lonLat = new OpenLayers.LonLat(obj.lon, obj.lat
 			).transform(this.get_display_projection(),  this.get_map().getProjectionObject() );
 	this.map.setCenter(lonLat, zoom);
